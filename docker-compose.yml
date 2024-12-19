@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  erp_fe:
+    build: .
+    container_name: erp_fe
+    restart: unless-stopped
+    ports:
+      - "5444:5444"
+    volumes:
+      - ../erp_frontend/:/erp_fe_app

@@ -1,0 +1,30 @@
+#name: Uptop ERP Frontend CD
+#
+#on:
+#  push:
+#    branches: [ "main" ]
+#
+#jobs:
+#  build:
+#
+#    runs-on: ubuntu-latest
+#
+#    strategy:
+#      matrix:
+#        node-version: [ 18.x ]
+#
+#    steps:
+#      - name: Deploy using ssh
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          username: ${{ secrets.USERNAME }}
+#          key: ${{ secrets.PRIVATE_KEY }}
+#          port: 22
+#          script: |
+#            cd ~/workspaces/erp_frontend
+#            git pull origin master
+#            git status
+#            yarn install --only=prod
+#            yarn build
+#            yarn prod
