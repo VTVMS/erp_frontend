@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <div class="home row justify-between py-3 flex items-center sm:flex-nowrap ">
+        <div class="home row justify-between py-3 flex items-center sm:flex-nowrap">
             <div class="sm:flex hidden ml-3">
                 <button class="toggle-sidebar-button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-3 dark:text-gray-300 text-gray-100">
@@ -16,7 +16,7 @@
             <div class="row flex items-center">
                 <div class="sm:flex hidden ml-3">
                     <LanguageSwitcher />
-                    <ColorSwitcher/>
+                    <ColorSwitcher />
                 </div>
                 <div class="sm:flex hidden dropdown-nav px-4">
                     <div class="dropdown-nav inline-block sm:ml-2 sm-3 group">
@@ -66,12 +66,11 @@
 <script lang="ts" setup>
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import ColorSwitcher from '@/components/ColorSwitcher.vue';
-
 </script>
 
 <style scoped>
 .home {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 </style>
