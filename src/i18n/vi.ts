@@ -17,7 +17,9 @@ const vi = {
     powerGroup:'Nhóm quyền',
     categoryAuthorization:'Chuyên mục',
     channel:'Kênh phát sóng',
-    position:'Chức vụ'
+    position:'Chức vụ',
+    total:"Tổng"
+
   };
   
   export default vi;

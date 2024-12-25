@@ -4,7 +4,8 @@ const en = {
     admin: 'Admin',
     setUpProfile: 'Setting Profile',
     changePass:'Change password',
-    logout:'Log Out'
+    logout:'Log Out',
+    total:"Total"
   };
   
   export default en;

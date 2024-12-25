@@ -9,6 +9,4 @@ const app = createApp(App);
 
 app.use(router);
 app.use(i18n);
-
-
 app.mount('#app');
