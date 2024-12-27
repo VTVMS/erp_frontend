@@ -11,7 +11,7 @@
 
 <style scoped>
 .home {
-  background-color: var(--bg-color);
+  background-color: var(--color-60);
   color: var(--text-color);
   padding: 20px;
   border: 2px solid var(--accent-color);

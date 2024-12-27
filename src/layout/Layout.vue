@@ -6,8 +6,8 @@
             <SideBar />
 
             <div class="flex-1 grid grid-rows-[1fr_auto]">
-                <div class="overflow-y-auto p-3 h-full bg-gray-300">
-                    <div class=" rounded-xl h-full flex flex-col p-2 bg-white">
+                <div class="overflow-y-auto p-2 h-full bg-gray-300">
+                    <div class="border-2 rounded-xl h-full flex flex-col p-2 bg-white">
                         <slot />
                     </div>
                 </div>
@@ -17,19 +17,12 @@
     </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import SideBar from '@/components/SideBar.vue';
 import Head from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 
-export default {
-    name: 'MainLayout',
-    components: {
-        SideBar,
-        Head,
-        Footer,
-    },
-};
+
 </script>
 
 <style>

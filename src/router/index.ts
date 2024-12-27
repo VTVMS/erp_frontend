@@ -27,9 +27,14 @@ const routes = [
         component: () => import('@/views/employee/diagram/diagram.vue'),
     },
     {
-        path: '/category',
+        path: '/catalog/category',
         name: 'Category',
-        component: () => import('@/views/category/category.vue'),
+        component: () => import('@/views/catalog/category/category.vue'),
+    },
+    {
+        path: '/catalog/channel',
+        name: 'Channel',
+        component: () => import('@/views/catalog/channel/channel.vue'),
     },
     {
         path: '/program_framework',
@@ -61,15 +66,17 @@ const routes = [
         name: 'Category-Authorization',
         component: () => import('@/views/admin/category_authorization/category_authorization.vue'),
     },
-    {
-        path: '/admin/channel',
-        name: 'Channel',
-        component: () => import('@/views/admin/channel/channel.vue'),
-    },
+    
     {
         path: '/admin/position',
         name: 'Position',
         component: () => import('@/views/admin/position/position.vue'),
+    },
+
+    {
+        path: '/admin/list_account',
+        name: 'list_account',
+        component: () => import('@/views/admin/list_account/list_account.vue'),
     },
 ];
 

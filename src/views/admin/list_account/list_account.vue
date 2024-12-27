@@ -1,7 +1,7 @@
 <template>
     <div class=" h-full">
       <h1>{{ $t('welcome') }}</h1>
-      <p>{{ $t('employee') }}</p>
+      <p>{{ $t('home') }}</p>
     </div>
   </template>
   
@@ -11,7 +11,7 @@
   
   <style scoped>
   .home {
-    background-color: var(--bg-color);
+    background-color: var(--color-60);
     color: var(--text-color);
     padding: 20px;
     border: 2px solid var(--accent-color);

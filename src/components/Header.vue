@@ -1,8 +1,8 @@
 <template>
     <div class="relative">
-        <div class="home row justify-between py-3 flex items-center sm:flex-nowrap">
+        <div class="home row justify-between py-3 flex items-center sm:flex-nowrap text-gray-200">
             <div class="sm:flex hidden ml-3">
-                <button class="toggle-sidebar-button">
+                <button @click="$emit('toggle-sidebar')"  class="toggle-sidebar-button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-3 dark:text-gray-300 text-gray-100">
                         <path
                             stroke-linecap="round"
@@ -25,7 +25,7 @@
                                 <img class="h-10 w-10 flex-shrink-0 rounded-full object-cover bg-gray-300" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" alt="" />
                             </div>
                         </div>
-                        <div class="dropdown-content-nav border min-w-44 rounded-md hidden absolute right-0 bg-gray-100 text-gray-800 shadow group-hover:block">
+                        <div class="dropdown-content-nav border min-w-44 rounded-md hidden absolute right-0 bg-gray-100 text-gray-800 shadow group-hover:block z-50">
                             <div class="flex flex-col w-full">
                                 <button class="flex items-center gap-x-1 px-2 py-2 text-sm border-b border-gray-300 hover:bg-gray-100">
                                     <a href="/profile/personal-information" class="group flex gap-x-2 rounded-md items-center">
@@ -66,11 +66,12 @@
 <script lang="ts" setup>
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import ColorSwitcher from '@/components/ColorSwitcher.vue';
+
 </script>
 
 <style scoped>
 .home {
-    background-color: var(--bg-color);
+    background-color: var(--color-60);
     color: var(--text-color);
 }
 </style>
