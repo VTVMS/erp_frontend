@@ -42,7 +42,25 @@ const vi = {
     addEmployee: 'Thêm nhân viên',
     editEmployee: 'Cập nhật nhân viên',
     deleteEmployee: 'Xoá nhân viên',
-    titleDelete:'Bạn có chắc chắn muốn xóa mục này?'
+    titleDelete: 'Bạn có chắc chắn muốn xóa mục này?',
+    save: 'Lưu',
+    sloganLogin: ' Hiệu quả trong từng công đoạn, hoàn hảo trong từng chương trình. ',
+    signIn: 'Đăng nhập',
+    forgotPass: 'Quên mật khẩu',
+    remember: 'Nhớ mật khẩu',
+    profile: 'Thông tin cá nhân',
+    address: 'Địa chỉ',
+    createEmployee: 'Người tạo',
+    createDate: 'Ngày tạo ',
+    listAccount: 'Danh sách tài khoản',
+    addAccount:'Thêm tài khoản',
+    editAccount:'Cập nhật tài khoản',
+    deleteAccount:'Xoá tài khoản',
+    authorities:'Quyền',
+    addPosition:'Thêm tài khoản',
+    editPosition:'Cập nhật tài khoản',
+    deletePosition:'Xoá tài khoản',
+
 };
 
 export default vi;

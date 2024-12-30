@@ -7,7 +7,7 @@
                     {{ currentLanguage.text }}
                 </div>
             </div>
-            <div class="dropdown-content-nav border min-w-36 rounded-md hidden absolute right-0 bg-gray-100 text-gray-800 shadow group-hover:block dark:bg-gray-900 dark:text-white dark:border-gray-700 z-20">
+            <div class="dropdown-content-nav border min-w-40 rounded-md hidden absolute right-0 bg-gray-100 text-gray-800 shadow group-hover:block dark:bg-gray-900 dark:text-white dark:border-gray-700 z-20">
                 <div class="flex flex-col w-full">
                     <button @click="changeLanguage('vi')" class="flex items-center gap-x-1 px-2 py-2 text-sm border-b border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700">
                         <img :src="languages.vi.imgSrc" alt="Vietnamese" class="w-12 h-6 px-2 object-cover" /> {{ languages.vi.name }}

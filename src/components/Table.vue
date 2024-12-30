@@ -92,9 +92,9 @@ function changePage(page: number | string) {
 </script>
 
 <template>
-    <div class="flex flex-wrap justify-between gap-2 px-2 items-end border-b-2 pb-2 mt-2">
+    <div class="flex flex-wrap justify-between gap-2 px-2 items-end border-b-2 pb-2 ">
         <div class="flex flex-wrap">
-            <h1 class="text-[28px] font-semibold leading-7 flex items-center text-[#3b82f6]">
+            <h1 class="text-[25px] font-semibold leading-7 flex items-center text-[#3b82f6]">
                 {{ $t(titleList) }}
             </h1>
         </div>
@@ -148,7 +148,7 @@ function changePage(page: number | string) {
         </div>
     </div>
 
-    <div class="overflow-x-auto overflow-y-auto border rounded-xl mt-2" style="height: calc(100vh - 233px)">
+    <div class="overflow-x-auto overflow-y-auto border rounded-xl mt-2" style="height: calc(100vh - 220px)">
         <table class="table-auto w-full">
             <thead>
                 <tr class="border-b text-base">

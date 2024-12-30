@@ -1,8 +1,7 @@
 <template>
-    <div class="home min-w-[270px] text-gray-200">
+    <div class="home min-w-[280px] text-gray-200 font-semibold	">
         <nav class="navlist no-width-scrollbar overflow-y-auto flex flex-1 flex-col px-3">
             <ul role="list">
-                <!-- Lặp qua các route -->
                 <li v-for="(route, index) in routes" :key="index">
                     <div
                         v-if="route.children"
@@ -77,7 +76,7 @@ const routes = [
         children: [
             { path: '/employee/employee', label: 'listEmployee' },
             { path: '/employee/department', label: 'listDepartment' },
-            { path: '/admin/position', label: 'listPosition' },
+            { path: '/employee/position', label: 'listPosition' },
             { path: '/employee/diagram', label: 'diagram' },
         ],
     },

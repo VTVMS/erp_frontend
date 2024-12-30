@@ -28,7 +28,7 @@
                         <div class="dropdown-content-nav border min-w-44 rounded-md hidden absolute right-0 bg-gray-100 text-gray-800 shadow group-hover:block z-50">
                             <div class="flex flex-col w-full">
                                 <button class="flex items-center gap-x-1 px-2 py-2 text-sm border-b border-gray-300 hover:bg-gray-100">
-                                    <a href="/profile/personal-information" class="group flex gap-x-2 rounded-md items-center">
+                                    <a href="/profile" class="group flex gap-x-2 rounded-md items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 shrink-0">
                                             <path
                                                 stroke-linecap="round"
@@ -47,7 +47,7 @@
                                         <span class="text-sm leading-6">{{ $t('changePass') }}</span>
                                     </a>
                                 </button>
-                                <button class="flex items-center gap-x-1 px-2 py-2 text-sm border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-b-md" on:click="{on_logout}">
+                                <button class="flex items-center gap-x-1 px-2 py-2 text-sm border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-b-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
                                     </svg>
