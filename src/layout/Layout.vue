@@ -1,8 +1,8 @@
 <template>
     <div id="main-layout" class="flex flex-col justify-between bg-gray-900">
-        <Head />
+        <Head :toggleSidebar="toggleSidebar" />
         <div class="row flex justify-between dark:bg-gray-900" style="height: calc(100vh - 64px)">
-            <SideBar />
+            <SideBar v-if="isSidebarVisible" />
 
             <div class="flex-1 grid grid-rows-[1fr_auto]">
                 <div class="overflow-y-auto p-2 bg-gray-300">
@@ -17,7 +17,15 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import SideBar from '@/components/SideBar.vue';
 import Head from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
+
+const isSidebarVisible = ref(true);
+
+const toggleSidebar = () => {
+    isSidebarVisible.value = !isSidebarVisible.value;
+};
 </script>
+

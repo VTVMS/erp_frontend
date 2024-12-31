@@ -1,8 +1,8 @@
 <template>
     <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 rounded-md">
-        <div :style="{ width: width || '550px' }" class="bg-white rounded-2xl shadow-lg  px-4">
+        <div :style="{ width: width || '550px' }" class="bg-white rounded-2xl shadow-lg px-4">
             <div class="py-3 flex justify-center align-center w-full border-b-2 border-gray-300">
-                <slot name="header"></slot>
+                <div class="text-2xl font-semibold flex items-center text-gray-800"><slot name="header"></slot></div>
             </div>
             <div class="mt-3 pb-4">
                 <slot name="content"></slot>

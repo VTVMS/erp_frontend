@@ -94,7 +94,7 @@ function changePage(page: number | string) {
 <template>
     <div class="flex flex-wrap justify-between gap-2 px-2 items-end border-b-2 pb-2 ">
         <div class="flex flex-wrap">
-            <h1 class="text-[25px] font-semibold leading-7 flex items-center text-[#3b82f6]">
+            <h1 class="text-[23px] font-semibold leading-7 flex items-center text-[#3b82f6]">
                 {{ $t(titleList) }}
             </h1>
         </div>

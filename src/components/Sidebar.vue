@@ -1,5 +1,5 @@
 <template>
-    <div class="home min-w-[280px] text-gray-200 font-semibold	">
+    <div class="home min-w-[299px] text-gray-200 font-semibold	h-full">
         <nav class="navlist no-width-scrollbar overflow-y-auto flex flex-1 flex-col px-3">
             <ul role="list">
                 <li v-for="(route, index) in routes" :key="index">

@@ -1,7 +1,7 @@
 const vi = {
     welcome: 'Chào mừng bạn đến với Vue 3',
     home: 'Trang chủ',
-    admin: 'Quản trị',
+    admin: 'Quản trị hệ thống',
     setUpProfile: 'Thông tin cá nhân',
     changePass: 'Đổi mật khẩu',
     logout: 'Đăng xuất',

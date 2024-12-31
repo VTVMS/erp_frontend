@@ -2,7 +2,7 @@
     <div class="relative">
         <div class="home row justify-between py-3 flex items-center sm:flex-nowrap text-gray-200">
             <div class="sm:flex hidden ml-3">
-                <button @click="$emit('toggle-sidebar')"  class="toggle-sidebar-button">
+                <button @click="toggleSidebar" class="toggle-sidebar-button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-3 dark:text-gray-300 text-gray-100">
                         <path
                             stroke-linecap="round"
@@ -67,6 +67,12 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import ColorSwitcher from '@/components/ColorSwitcher.vue';
 
+defineProps({
+    toggleSidebar: {
+        type: Function,
+        required: true,
+    },
+});
 </script>
 
 <style scoped>

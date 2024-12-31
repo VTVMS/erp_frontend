@@ -1,3 +1,80 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import TableComponent from '@/components/Table.vue';
+import Dialog from '@/components/Dialog.vue';
+import CustomInput from '@/components/Input.vue';
+import SelectInput from '@/components/Select.vue';
+
+const table = ref({
+    cols: [
+        { title: 'avatar', field: 'avatar', type: 'img', show: true, sort: true },
+        { title: 'codeEmployee', field: 'codeEmployee', show: true, sort: true },
+        { title: 'name', field: 'name', show: true, sort: true },
+        { title: 'department', field: 'department', show: true, sort: true },
+        { title: 'position', field: 'position', show: true, sort: true },
+        { title: 'phone', field: 'phone', show: true, sort: true },
+        { title: 'email', field: 'email', show: true, sort: true },
+    ],
+    data: [
+        {
+            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+            codeEmployee: 'Stock updated',
+            name: 'John Doe',
+            department: '2024-01-01',
+            position: 'Stock updated',
+            phone: 'John Doe',
+            email: '2024-01-01',
+        },
+    ],
+});
+const isDialogOpen = ref(false);
+const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
+const newItem = ref('');
+const editedItem = ref('');
+
+const avatar = ref('');
+const password = ref('');
+const name = ref('');
+const sex = ref('');
+const birthday = ref('');
+const position = ref('');
+const phone = ref('');
+const email = ref('');
+const employeeApprove = ref('');
+
+const openDialog = (type: 'add' | 'edit' | 'delete') => {
+    typeDialog.value = type;
+    isDialogOpen.value = true;
+};
+
+const handleAddItem = () => {
+    console.log('Adding item:', newItem.value);
+};
+
+const handleEditItem = () => {
+    console.log('Editing item:', editedItem.value);
+};
+
+const handleDeleteItem = () => {
+    console.log('Deleting item');
+    // Logic for deleting item
+};
+
+function sortData(field: string) {
+    table.value.data.sort((a: any, b: any) => {
+        const valueA = a[field]?.toString().toLowerCase() || '';
+        const valueB = b[field]?.toString().toLowerCase() || '';
+        return valueA.localeCompare(valueB);
+    });
+}
+
+const positions = [
+    { id: 1, name: 'select 1' },
+    { id: 2, name: 'select 2' },
+    { id: 3, name: 'select 3' },
+];
+</script>
+
 <template>
     <TableComponent :table="table" titleList="listEmployee">
         <template #customContent>
@@ -80,361 +157,55 @@
     <Dialog :isOpen="isDialogOpen" @update:isOpen="isDialogOpen = $event" :width="'700px'">
         <template #header>
             <div v-if="typeDialog === 'add'">
-                <h1 class="text-2xl font-semibold flex items-center text-gray-800">
-                    {{ $t('addEmployee') }}
-                </h1>
+                {{ $t('addEmployee') }}
             </div>
             <div v-if="typeDialog === 'edit'">
-                <h1 class="text-2xl font-semibold flex items-center text-gray-800">
-                    {{ $t('editEmployee') }}
-                </h1>
+                {{ $t('editEmployee') }}
             </div>
             <div v-if="typeDialog === 'delete'">
-                <h1 class="text-2xl font-semibold flex items-center text-gray-800">
-                    {{ $t('deleteEmployee') }}
-                </h1>
+                {{ $t('deleteEmployee') }}
             </div>
         </template>
         <template #content>
             <div v-if="typeDialog === 'add'">
-                <div class="">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('codeEmployee') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Tiêu đề bài viết"
-                        />
-                    </div>
+                <CustomInput v-model="name" type="text" label="name" placeholder="name" />
+                <div class="grid gap-4 grid-cols-2 grid-rows-1">
+                    <CustomInput v-model="password" type="text" label="password" placeholder="password" />
+                    <SelectInput v-model="position" :data="positions" label="position" id="position" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('password') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="email"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="position" class="block text-base font-medium leading-6">{{ $t('position') }}</label>
-                        <select
-                            id="position"
-                            v-model="selectPosition"
-                            name="user"
-                            autocomplete="country-name"
-                            class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:max-w-xs sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                        >
-                            <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                                {{ position.position_name }}
-                            </option>
-                        </select>
-                    </div>
+                    <CustomInput v-model="email" type="text" label="email" placeholder="email" />
+                    <CustomInput v-model="phone" type="text" label="phone" placeholder="phone" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('email') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="email"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('phone') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="email"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
+                    <SelectInput v-model="sex" :data="positions" label="sex" id="sex" />
+                    <CustomInput v-model="birthday" type="date" label="birthday" placeholder="birthday" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="position" class="block text-base font-medium leading-6">{{ $t('sex') }}</label>
-                        <select
-                            id="position"
-                            v-model="selectPosition"
-                            name="user"
-                            autocomplete="country-name"
-                            class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:max-w-xs sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                        >
-                            <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                                {{ position.position_name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('birthday') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="date"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
+                    <SelectInput v-model="positions" :data="positions" label="department" id="department" />
+                    <CustomInput v-model="employeeApprove" type="text" label="employeeApprove" placeholder="employeeApprove" />
                 </div>
-                <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="position" class="block text-base font-medium leading-6">{{ $t('sex') }}</label>
-                        <select
-                            id="department"
-                            v-model="selectPosition"
-                            name="user"
-                            autocomplete="country-name"
-                            class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:max-w-xs sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                        >
-                            <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                                {{ position.position_name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('employeeApprove') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="text"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="email" class="block text-base font-medium leading-6">{{ $t('avatar') }}</label>
-
-                    <div class="mt-2.5 py-3 w-auto rounded-lg border border-dashed border-gray-900/25 dark:bg-gray-850 dark:border-gray-600">
-                        <div ref="container" class="text-gray-400 relative group min-w-16">
-                            <div v-if="showImage">
-                                <div class="relative w-20 h-20">
-                                    <img :src="image" alt="Preview" class="border border-gray-300 rounded-md object-cover" />
-                                    <button class="absolute top-0 right-0 text-gray-600" @click="removeFile">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                                            <path
-                                                fill-rule="evenodd"
-                                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                                clip-rule="evenodd"
-                                            />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <svg class="mx-auto h-20 w-20 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                            </div>
-                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <label for="file-upload" class="cursor-pointer rounded-full bg-gray-200 p-2 hover:text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-
-                                    <input type="file" id="file-upload" name="file-upload" class="sr-only" @change="onChange" />
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <CustomInput v-model="avatar" type="img" label="avatar" placeholder="Choose an image" />
             </div>
             <div v-if="typeDialog === 'edit'">
-                <div class="">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('codeEmployee') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value="codeEmployee"
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Tiêu đề bài viết"
-                        />
-                    </div>
+                <CustomInput v-model="name" type="text" label="name" placeholder="name" />
+                <div class="grid gap-4 grid-cols-2 grid-rows-1">
+                    <CustomInput v-model="password" type="text" label="password" placeholder="password" />
+                    <SelectInput v-model="position" :data="positions" label="position" id="position" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('password') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value="password"
-                                type="email"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="position" class="block text-base font-medium leading-6">{{ $t('position') }}</label>
-                        <select
-                            id="position"
-                            v-model="selectPosition"
-                            name="user"
-                            autocomplete="country-name"
-                            class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:max-w-xs sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                        >
-                            <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                                {{ position.position_name }}
-                            </option>
-                        </select>
-                    </div>
+                    <CustomInput v-model="email" type="text" label="email" placeholder="email" />
+                    <CustomInput v-model="phone" type="text" label="phone" placeholder="phone" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('email') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="email"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('phone') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="email"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
+                    <SelectInput v-model="sex" :data="positions" label="sex" id="sex" />
+                    <CustomInput v-model="birthday" type="date" label="birthday" placeholder="birthday" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="position" class="block text-base font-medium leading-6">{{ $t('sex') }}</label>
-                        <select
-                            id="position"
-                            v-model="selectPosition"
-                            name="user"
-                            autocomplete="country-name"
-                            class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:max-w-xs sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                        >
-                            <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                                {{ position.position_name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('birthday') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="date"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
+                    <SelectInput v-model="positions" :data="positions" label="department" id="department" />
+                    <CustomInput v-model="employeeApprove" type="text" label="employeeApprove" placeholder="employeeApprove" />
                 </div>
-                <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <div class="mt-2.5">
-                        <label for="position" class="block text-base font-medium leading-6">{{ $t('sex') }}</label>
-                        <select
-                            id="department"
-                            v-model="selectPosition"
-                            name="user"
-                            autocomplete="country-name"
-                            class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:max-w-xs sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                        >
-                            <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                                {{ position.position_name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mt-2.5">
-                        <label for="email" class="block text-base font-medium leading-6"> {{ $t('employeeApprove') }} </label>
-                        <div class="mt-2.5">
-                            <input
-                                bind:value=""
-                                type="text"
-                                name="email"
-                                id="email"
-                                class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                                placeholder="Tiêu đề bài viết"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="email" class="block text-base font-medium leading-6">{{ $t('avatar') }}</label>
-
-                    <div class="mt-2.5 py-3 w-auto rounded-lg border border-dashed border-gray-900/25 dark:bg-gray-850 dark:border-gray-600">
-                        <div ref="container" class="text-gray-400 relative group min-w-16">
-                            <div v-if="showImage">
-                                <div class="relative w-20 h-20">
-                                    <img :src="image" alt="Preview" class="border border-gray-300 rounded-md object-cover" />
-                                    <button class="absolute top-0 right-0 text-gray-600" @click="removeFile">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                                            <path
-                                                fill-rule="evenodd"
-                                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                                clip-rule="evenodd"
-                                            />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <svg class="mx-auto h-20 w-20 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                            </div>
-                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <label for="file-upload" class="cursor-pointer rounded-full bg-gray-200 p-2 hover:text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-
-                                    <input type="file" id="file-upload" name="file-upload" class="sr-only" @change="onChange" />
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <CustomInput v-model="avatar" type="img" label="avatar" placeholder="Choose an image" />
             </div>
             <div v-if="typeDialog === 'delete'">
                 <p>{{ $t('titleDelete') }}</p>
@@ -474,101 +245,3 @@
         </template>
     </Dialog>
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue';
-import TableComponent from '@/components/Table.vue';
-import Dialog from '@/components/Dialog.vue';
-
-const table = ref({
-    cols: [
-        { title: 'avatar', field: 'avatar', type: 'img', show: true, sort: true },
-        { title: 'codeEmployee', field: 'codeEmployee', show: true, sort: true },
-        { title: 'name', field: 'name', show: true, sort: true },
-        { title: 'department', field: 'department', show: true, sort: true },
-        { title: 'position', field: 'position', show: true, sort: true },
-        { title: 'phone', field: 'phone', show: true, sort: true },
-        { title: 'email', field: 'email', show: true, sort: true },
-    ],
-    data: [
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeEmployee: 'Stock updated',
-            name: 'John Doe',
-            department: '2024-01-01',
-            position: 'Stock updated',
-            phone: 'John Doe',
-            email: '2024-01-01',
-        },
-    ],
-});
-
-const isDialogOpen = ref(false);
-const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
-const newItem = ref('');
-const editedItem = ref('');
-
-const showImage = ref(false);
-const image = ref('');
-const avatar = ref<File | null>(null);
-
-const container = ref<HTMLElement | null>(null);
-
-const onChange = (event: Event) => {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        avatar.value = file;
-
-        // Hiển thị hình ảnh xem trước
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            if (e.target?.result) {
-                image.value = e.target.result as string;
-                showImage.value = true;
-            }
-        };
-        reader.readAsDataURL(file);
-    }
-};
-
-const removeFile = () => {
-    showImage.value = false;
-    avatar.value = null;
-    image.value = '';
-};
-
-const openDialog = (type: 'add' | 'edit' | 'delete') => {
-    typeDialog.value = type;
-    isDialogOpen.value = true;
-};
-
-const handleAddItem = () => {
-    console.log('Adding item:', newItem.value);
-};
-
-const handleEditItem = () => {
-    console.log('Editing item:', editedItem.value);
-};
-
-const handleDeleteItem = () => {
-    console.log('Deleting item');
-    // Logic for deleting item
-};
-
-function sortData(field: string) {
-    table.value.data.sort((a: any, b: any) => {
-        const valueA = a[field]?.toString().toLowerCase() || '';
-        const valueB = b[field]?.toString().toLowerCase() || '';
-        return valueA.localeCompare(valueB);
-    });
-}
-
-const positions = ref([
-    { id: 1, position_name: 'Vị trí 1' },
-    { id: 2, position_name: 'Vị trí 2' },
-    { id: 3, position_name: 'Vị trí 3' },
-]);
-
-const selectPosition = ref('');
-</script>

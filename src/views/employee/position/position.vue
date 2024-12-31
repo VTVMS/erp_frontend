@@ -4,7 +4,7 @@
           <ExpandablePanel :dataList="items" @add="handleAdd" @edit="handleEdit" @delete="handleDelete" />
         </div>
         <div class="col-span-9">
-            <TableComponent :table="table" titleList="listPosition">
+            <TableComponent :table="table" titleList="listEmployee">
                 <template #customContent>
                     <button @click="openDialog('add')" type="button" class="inline-flex items-center text-gray-100 justify-center px-3 rounded-md py-1 text-basemarker: font-medium focus:outline-none bg-[#3b82f6] hover:scale-105 hover:shadow-lg transition-transform duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
