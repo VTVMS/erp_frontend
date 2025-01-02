@@ -1,33 +1,32 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+    <div class="home">
+        <component :is="layout">
+            <router-view />
+        </component>
+    </div>
 </template>
 
+<script lang="ts" setup>
+import { computed, onMounted } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
+import MainLayout from '@/layout/Layout.vue';
+import AuthLayout from '@/layout/AuthLayout.vue';
+
+const authStore = useAuthStore();
+
+onMounted(() => {
+    authStore.checkLogin();
+});
+
+const layout = computed(() => {
+    // return authStore.isLoggedIn ? MainLayout : AuthLayout; //check điều kiện nếu chưa login thì dùng AuthLayout và nếu đã đăng nhập thì dùng MainLayout
+    return MainLayout;   //dùng để test màn hình khi chưa có api đăng nhâppj
+
+});
+</script>
+
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.home {
+    background-color: var(--color-60);
 }
 </style>
