@@ -9,14 +9,9 @@
                 <p class="text-orange-500 font-semibold">Broadcom</p>
                 .
             </div>
-
             All rights reserved |<a href="https://uptoperp.com/" target="_blank">Legal</a>
         </div>
     </div>
 </template>
-
-<script lang="ts">
-export default {
-    name: 'Footer',
-};
+<script lang="ts" setup>
 </script>

@@ -89,18 +89,39 @@ function changePage(page: number | string) {
         currentPage.value = page;
     }
 }
+function sortData() {
+    const firstField = visibleCols.value[1].field;
+    let fieldToSort = firstField;
+    const isImageColumn = (value) => {
+        return typeof value === 'string' && value.startsWith('https') && (value.endsWith('.jpg') || value.endsWith('.png') || value.endsWith('.jpeg'));
+    };
+    if (props.table.data.every((row) => isImageColumn(row[firstField]))) {
+        fieldToSort = visibleCols.value[1].field;
+    }
+    props.table.data.sort((a, b) => {
+        if (typeof a[fieldToSort] === 'string' && typeof b[fieldToSort] === 'string') {
+            return a[fieldToSort].localeCompare(b[fieldToSort]);
+        } else if (typeof a[fieldToSort] === 'number' && typeof b[fieldToSort] === 'number') {
+            return a[fieldToSort] - b[fieldToSort];
+        } else if (a[fieldToSort] instanceof Date && b[fieldToSort] instanceof Date) {
+            return a[fieldToSort] - b[fieldToSort];
+        } else {
+            return 0;
+        }
+    });
+}
 </script>
 
 <template>
-    <div class="flex flex-wrap justify-between gap-2 px-2 items-end border-b-2 pb-2 ">
+    <div class="flex flex-wrap justify-between gap-2 px-2 items-end border-b-2 pb-2">
         <div class="flex flex-wrap">
-            <h1 class="text-[23px] font-semibold leading-7 flex items-center text-[#3b82f6]">
+            <h1 class="text-[25px] font-semibold leading-7 flex items-center text-[#3b82f6]">
                 {{ $t(titleList) }}
             </h1>
         </div>
         <div class="flex gap-4 items-end">
             <slot name="customContent"></slot>
-
+            <!-- <button @click="sortData" class="px-4 py-2 bg-blue-500 text-white rounded">Sort A-Z</button> -->
             <div class="dropdown-nav">
                 <div class="dropdown-nav group relative">
                     <div class="dropdown-toggle-nav">

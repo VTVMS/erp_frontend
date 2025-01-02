@@ -4,6 +4,7 @@ import TableComponent from '@/components/Table.vue';
 import Dialog from '@/components/Dialog.vue';
 import CustomInput from '@/components/Input.vue';
 import SelectInput from '@/components/Select.vue';
+import Button from '@/components/Button.vue';
 
 const table = ref({
     cols: [
@@ -18,8 +19,44 @@ const table = ref({
     data: [
         {
             avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeEmployee: 'Stock updated',
+            codeEmployee: 'dStock',
             name: 'John Doe',
+            department: 'IT',
+            position: 'Manager',
+            phone: '12345',
+            email: 'johndoe@example.com',
+        },
+        {
+            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+            codeEmployee: 'aStock',
+            name: 'Jane Doe',
+            department: 'HR',
+            position: 'Assistant',
+            phone: '67890',
+            email: 'janedoe@example.com',
+        },
+        {
+            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+            codeEmployee: 'cStock',
+            name: 'Alice Smith',
+            department: 'Sales',
+            position: 'Lead',
+            phone: '11223',
+            email: 'alicesmith@example.com',
+        },
+        {
+            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+            codeEmployee: 'dStock',
+            name: 'Bob Johnson',
+            department: 'Marketing',
+            position: 'Coordinator',
+            phone: '44556',
+            email: 'bobjohnson@example.com',
+        },
+        {
+            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+            codeEmployee: 'vStock updated',
+            name: 'bJohn Doe',
             department: '2024-01-01',
             position: 'Stock updated',
             phone: 'John Doe',
@@ -60,13 +97,13 @@ const handleDeleteItem = () => {
     // Logic for deleting item
 };
 
-function sortData(field: string) {
-    table.value.data.sort((a: any, b: any) => {
-        const valueA = a[field]?.toString().toLowerCase() || '';
-        const valueB = b[field]?.toString().toLowerCase() || '';
-        return valueA.localeCompare(valueB);
-    });
-}
+// function sortData(field: string) {
+//     table.value.data.sort((a: any, b: any) => {
+//         const valueA = a[field]?.toString().toLowerCase() || '';
+//         const valueB = b[field]?.toString().toLowerCase() || '';
+//         return valueA.localeCompare(valueB);
+//     });
+// }
 
 const positions = [
     { id: 1, name: 'select 1' },
@@ -78,12 +115,8 @@ const positions = [
 <template>
     <TableComponent :table="table" titleList="listEmployee">
         <template #customContent>
-            <button @click="openDialog('add')" type="button" class="inline-flex items-center text-gray-100 justify-center px-3 rounded-md py-1 text-basemarker: font-medium focus:outline-none bg-[#3b82f6] hover:scale-105 hover:shadow-lg transition-transform duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                {{ $t('add') }}
-            </button>
+            <Button type="add" @click="openDialog('add')" />
+
             <div class="relative mt-1">
                 <input type="text" id="searchInput" placeholder="Tìm kiếm ..." class="border border-gray-300 rounded-lg pl-10 w-full py-1" />
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="absolute inset-y-0 left-0 w-5 h-5 text-gray-400 ml-2 my-auto">
@@ -129,28 +162,8 @@ const positions = [
             </div>
         </template>
         <template #actions="{ row }">
-            <button
-                @click="openDialog('edit')"
-                type="button"
-                class="inline-flex items-center border text-gray-500 border-gray-400 justify-center px-1 rounded-md py-1 text-basemarker: font-medium focus:outline-none bg-gray-100 hover:bg-gray-100 hover:scale-105 hover:shadow-lg transition-transform duration-300"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                </svg>
-            </button>
-            <button
-                @click="openDialog('delete')"
-                type="button"
-                class="inline-flex items-center border text-red-400 border-red-300 justify-center px-1 rounded-md py-1 text-basemarker: font-medium focus:outline-none bg-gray-100 hover:bg-gray-100 hover:scale-105 hover:shadow-lg transition-transform duration-300"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                    />
-                </svg>
-            </button>
+            <Button type="actionEdit" @click="openDialog('edit')" />
+            <Button type="actionDelete" @click="openDialog('delete')" />
         </template>
     </TableComponent>
 
@@ -214,33 +227,13 @@ const positions = [
 
         <template #footer>
             <div v-if="typeDialog === 'add'">
-                <button @click="handleAddItem" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
-                    </svg>
-                    {{ $t('save') }}
-                </button>
+                <Button type="save" @click="handleAddItem" />
             </div>
             <div v-if="typeDialog === 'edit'">
-                <button @click="handleEditItem" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
-                    </svg>
-                    {{ $t('save') }}
-                </button>
+                <Button type="save" @click="handleEditItem" />
             </div>
             <div v-if="typeDialog === 'delete'">
-                <button @click="handleDeleteItem" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-1">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                        />
-                    </svg>
-
-                    {{ $t('delete') }}
-                </button>
+                <Button type="delete" @click="handleDeleteItem" />
             </div>
         </template>
     </Dialog>

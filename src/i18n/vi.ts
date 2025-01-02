@@ -61,6 +61,14 @@ const vi = {
     editPosition:'Cập nhật tài khoản',
     deletePosition:'Xoá tài khoản',
 
+    codeDepartment:"Mã phòng ban",
+    nameDepartment:"Tên phòng ban",
+    quantityEmployee:"Số lượng nhân viên",
+
+    addDepartment:"Thêm phòng ban",
+    editDepartment:"Cập nhật phòng ban",
+    deleteDepartment:"Xoá phòng ban",
+
 };
 
 export default vi;
