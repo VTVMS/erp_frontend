@@ -84,10 +84,6 @@ export default {
         onCheckItem(id) {
             this.check = id;
         },
-        onAdd() {
-            this.$emit('add');
-        },
-    
     },
 };
 </script>
