@@ -68,6 +68,7 @@ const vi = {
     addDepartment:"Thêm phòng ban",
     editDepartment:"Cập nhật phòng ban",
     deleteDepartment:"Xoá phòng ban",
+    fieldIsRequired:'Trường này là bắt buộc'
 
 };
 

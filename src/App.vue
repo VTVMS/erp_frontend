@@ -20,7 +20,7 @@ onMounted(() => {
 
 const layout = computed(() => {
     // return authStore.isLoggedIn ? MainLayout : AuthLayout; //check điều kiện nếu chưa login thì dùng AuthLayout và nếu đã đăng nhập thì dùng MainLayout
-    return MainLayout;   //dùng để test màn hình khi chưa có api đăng nhâppj
+    return AuthLayout;   //dùng để test màn hình khi chưa có api đăng nhâppj
 
 });
 </script>
