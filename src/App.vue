@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore } from '@/stores/auth.store.js';
 import MainLayout from '@/layout/Layout.vue';
 import AuthLayout from '@/layout/AuthLayout.vue';
 
@@ -20,7 +20,7 @@ onMounted(() => {
 
 const layout = computed(() => {
     // return authStore.isLoggedIn ? MainLayout : AuthLayout; //check điều kiện nếu chưa login thì dùng AuthLayout và nếu đã đăng nhập thì dùng MainLayout
-    return MainLayout;   //dùng để test màn hình khi chưa có api đăng nhâppj
+    return AuthLayout;   //dùng để test màn hình khi chưa có api đăng nhâppj
 
 });
 </script>

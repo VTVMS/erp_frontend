@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
+import {EXPIRED_ACCESS_TOKEN_LOCAL} from "../common/const.ts";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        isLoggedIn: false,
+        isLoggedIn: checkTokenIsValid(),
     }),
     actions: {
-        login() {
+        async login() {
             this.isLoggedIn = true;
             localStorage.setItem('isLoggedIn', 'true');
         },
@@ -18,3 +19,9 @@ export const useAuthStore = defineStore('auth', {
         },
     },
 });
+
+const checkTokenIsValid = () => {
+    const expire_time = localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL);
+
+    return true;
+}
