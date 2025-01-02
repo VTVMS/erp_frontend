@@ -90,21 +90,14 @@ function changePage(page: number | string) {
     }
 }
 function sortData() {
-    // Lấy tên cột mà bạn muốn sắp xếp, mặc định là cột thứ nhất (cột có chỉ số 0)
     const firstField = visibleCols.value[1].field;
     let fieldToSort = firstField;
-
-    // Kiểm tra nếu cột đầu tiên chứa URL hình ảnh (kiểm tra nếu là URL hợp lệ)
     const isImageColumn = (value) => {
         return typeof value === 'string' && value.startsWith('https') && (value.endsWith('.jpg') || value.endsWith('.png') || value.endsWith('.jpeg'));
     };
-
-    // Kiểm tra nếu cột thứ nhất chứa ảnh, chuyển qua cột thứ 2
     if (props.table.data.every((row) => isImageColumn(row[firstField]))) {
-        fieldToSort = visibleCols.value[1].field; // Chuyển sang cột thứ 2 nếu cột đầu tiên chứa ảnh
+        fieldToSort = visibleCols.value[1].field;
     }
-
-    // Tiến hành sắp xếp dữ liệu theo cột cần sắp xếp
     props.table.data.sort((a, b) => {
         if (typeof a[fieldToSort] === 'string' && typeof b[fieldToSort] === 'string') {
             return a[fieldToSort].localeCompare(b[fieldToSort]);
@@ -113,7 +106,7 @@ function sortData() {
         } else if (a[fieldToSort] instanceof Date && b[fieldToSort] instanceof Date) {
             return a[fieldToSort] - b[fieldToSort];
         } else {
-            return 0; // Nếu không phải là kiểu dữ liệu đã biết, không thay đổi
+            return 0;
         }
     });
 }

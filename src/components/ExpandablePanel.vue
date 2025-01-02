@@ -33,12 +33,6 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-content text-sm fixed hidden min-w-[100px] mt-[-50px] z-10 ml-7 rounded-lg bg-gray-200 shadow-[0px_16px_16px_7px_rgba(48,48,48,0.2)] group-hover:block">
-                                    <button class="flex rounded-t-xl items-center w-full text-black px-2 py-2 no-underline text-sm hover:bg-[#f6f5f5]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                                        </svg>
-                                        <span>Chỉnh sửa</span>
-                                    </button>
                                     <button class="flex items-center rounded-b-xl w-full text-black px-2 py-2 no-underline text-sm hover:bg-[#f6f5f5]">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                                             <path
@@ -55,47 +49,35 @@
                     </li>
                 </ul>
 
-                <button @click="handleAdd" class="w-full py-2 m-0 text-gray-800 border-t-2 rounded-b-lg bg-blue-100 hover:bg-blue-200 mt-auto">
+                <button @click="handleAdd" class="sticky z-5 bottom-0 w-full py-2 m-0 text-gray-800 border-t-2 rounded-b-lg bg-blue-100 hover:bg-blue-200 mt-auto">
                     {{ $t('add') }}
                 </button>
             </div>
         </transition>
     </div>
 </template>
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-<script>
-export default {
-    props: {
-        dataList: {
-            type: Array,
-            default: () => [],
-        },
+defineProps({
+    dataList: {
+        type: Array as () => Array<{ id: number; code: string; name: string }>,
+        default: () => [],
     },
-    data() {
-        return {
-            isExpanded: true,
-            check: null,
-        };
-    },
-    methods: {
-        togglePanel() {
-            this.isExpanded = !this.isExpanded;
-        },
-        onCheckItem(id) {
-            this.check = id;
-        },
-    },
-};
+});
+
+const isExpanded = ref(true);
+const check = ref<number | null>(null);
+
+function togglePanel() {
+    isExpanded.value = !isExpanded.value;
+}
+
+function onCheckItem(id: number) {
+    check.value = id;
+}
+
+function handleAdd() {
+    console.log('Add action');
+}
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: all 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-    height: 0;
-}
-</style>
