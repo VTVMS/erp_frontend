@@ -1,3 +1,4 @@
+import moment from "moment";
 import { defineStore } from 'pinia';
 import {
     ACCESS_TOKEN_LOCAL,
@@ -7,10 +8,11 @@ import {
 import {LoginByEmailRequest, TokenResponse} from "../model/auth.model.ts";
 import {authService} from "../services/auth.service.ts";
 import {userService} from "../services/user.service.ts";
+import router from "../router";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        isLoggedIn: checkIsTokenIsValid(),
+        isLoggedIn: false,
         refreshTokenTimeout: null,
     }),
     actions: {
@@ -21,18 +23,19 @@ export const useAuthStore = defineStore('auth', {
                     // Show toast error here
                     console.error(error);
                     this.isLoggedIn = false;
-                    this.stopRefreshTokenTimer();
+                    // this.stopRefreshTokenTimer();
                     return;
                 }
                 // Show toast notify here
                 setAuthToLocalStorage(result);
+                // this.startRefreshTokenTimer();
+                await router.push('/profile');
                 this.isLoggedIn = true;
-                this.startRefreshTokenTimer();
             } catch (err) {
                 // Show toast error here
                 console.error(err);
+                // this.stopRefreshTokenTimer();
                 this.isLoggedIn = false;
-                this.stopRefreshTokenTimer();
             }
         },
         async refreshToken() {
@@ -41,66 +44,71 @@ export const useAuthStore = defineStore('auth', {
                 if (error) {
                     // Show toast error here
                     console.error(error);
-                    this.stopRefreshTokenTimer();
+                    // this.stopRefreshTokenTimer();
                     return;
                 }
                 setAuthToLocalStorage(result);
+                // this.startRefreshTokenTimer();
                 this.isLoggedIn = true;
-                this.startRefreshTokenTimer();
             } catch (err) {
                 // Show toast error here
                 console.error(err);
-                this.stopRefreshTokenTimer();
+                clearAuthFromLocalStorage();
+                // this.stopRefreshTokenTimer();
+                this.isLoggedIn = false;
+                await router.push('/login');
             }
         },
-        startRefreshTokenTimer() {
-            try {
-                const expiredAt = new Date(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL));
-                const timeout = expiredAt.getTime() - Date.now() - (60 * 1000);
-                this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
-            } catch (err) {
-                console.error(err);
-            }
-        },
-        stopRefreshTokenTimer() {
-            clearTimeout(this.refreshTokenTimeout);
-        },
+        // startRefreshTokenTimer() {
+        //     try {
+        //         const expiredAt = new Date(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL));
+        //         const timeout = expiredAt.getTime() - Date.now() - (60 * 1000);
+        //         this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
+        //     } catch (err) {
+        //         console.error(err);
+        //     }
+        // },
+        // stopRefreshTokenTimer() {
+        //     clearTimeout(this.refreshTokenTimeout);
+        // },
         async logout() {
             try {
-                const [error, result] = await userService.logout();
+                const [error, _] = await userService.logout();
                 if (error) {
                     // Show toast error here
                     console.error(error);
                     return;
                 }
-                console.log(result);
                 // Show toast notify here
                 clearAuthFromLocalStorage();
-                this.stopRefreshTokenTimer();
+                // this.stopRefreshTokenTimer();
                 this.isLoggedIn = false;
+                await router.push('/login');
             } catch (err) {
                 console.error(err);
+            }
+        },
+        checkIsTokenIsValid() {
+            try {
+                const accessToken = localStorage.getItem(ACCESS_TOKEN_LOCAL);
+                const expiredAt = moment.utc(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL));
+                const dateNow = moment().utc();
+                const isExpiredTime = expiredAt.diff(dateNow, 'seconds');
+                this.isLoggedIn = !!accessToken && isExpiredTime > 0;
+            } catch (err) {
+                console.error(err);
+                clearAuthFromLocalStorage();
+                this.isLoggedIn = false;
             }
         }
     },
 });
 
-const checkIsTokenIsValid = (): boolean => {
-    try {
-        const accessToken = localStorage.getItem(ACCESS_TOKEN_LOCAL);
-        const expiredAt = new Date(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL));
-        return !!accessToken && expiredAt <= new Date();
-    } catch (err) {
-        console.error(err);
-        return false;
-    }
-}
-
 const setAuthToLocalStorage = (token: TokenResponse) => {
-    const expiredAt = new Date(token.expire_in * 1000);
+    const expiredAt = moment().add(token.expire_in, 'seconds').format("DD-MM-YYYY HH:mm:ss");
     localStorage.setItem(ACCESS_TOKEN_LOCAL, token.access_token);
     localStorage.setItem(REFRESH_TOKEN_LOCAL, token.refresh_token);
-    localStorage.setItem(EXPIRED_ACCESS_TOKEN_LOCAL, expiredAt.toISOString());
+    localStorage.setItem(EXPIRED_ACCESS_TOKEN_LOCAL, expiredAt);
 }
 
 const clearAuthFromLocalStorage = () => {

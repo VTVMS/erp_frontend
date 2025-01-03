@@ -1,5 +1,3 @@
-import {BaseClass} from "./base_class.ts";
-
 export interface AdminCreateNewUserRequest {
     email: string,
     password: string,
@@ -14,7 +12,7 @@ export interface AdminCreateNewUserRequest {
     is_create_new_employee: boolean,
 }
 
-export class UserModel extends BaseClass {
+export class UserModel {
     user_id!: string;
     email!: string;
     full_name!: string;

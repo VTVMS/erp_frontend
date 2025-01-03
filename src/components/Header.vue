@@ -31,7 +31,7 @@
                                 <hr/>
                                 <Button type="changePass" />
                                 <hr/>
-                                <Button type="logout" />
+                                <Button type="logout" @click.prevent="authStore.logout()" />
                             </div>
                         </div>
                     </div>
@@ -45,6 +45,7 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import ColorSwitcher from '@/components/ColorSwitcher.vue';
 import Button from '@/components/Button.vue';
+import {useAuthStore} from "@/stores/auth.store.ts";
 
 defineProps({
     toggleSidebar: {
@@ -52,6 +53,8 @@ defineProps({
         required: true,
     },
 });
+
+const authStore = useAuthStore();
 </script>
 
 <style scoped>

@@ -15,13 +15,11 @@ import AuthLayout from '@/layout/AuthLayout.vue';
 const authStore = useAuthStore();
 
 onMounted(() => {
-    authStore.checkLogin();
+    authStore.checkIsTokenIsValid();
 });
 
 const layout = computed(() => {
-    // return authStore.isLoggedIn ? MainLayout : AuthLayout; //check điều kiện nếu chưa login thì dùng AuthLayout và nếu đã đăng nhập thì dùng MainLayout
-    return AuthLayout;   //dùng để test màn hình khi chưa có api đăng nhâppj
-
+    return authStore.isLoggedIn ? MainLayout : AuthLayout;
 });
 </script>
 

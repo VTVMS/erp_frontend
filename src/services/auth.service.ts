@@ -6,11 +6,11 @@ import { axiosInstance } from "../common/config.ts";
 class AuthService {
     constructor(private httpClient: AxiosInstance) {}
 
-    async loginByEmail({email, password}: LoginByEmailRequest): Promise<[null, TokenResponse] | [Error]> {
+    async loginByEmail(payload: LoginByEmailRequest): Promise<[null, TokenResponse] | [Error]> {
         try {
             const { data } = await this.httpClient.post<TokenResponse>(
                 `/login_by_email`,
-                { email, password },
+                { ...payload },
             );
             return [null, data];
         } catch (error) {

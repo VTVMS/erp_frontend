@@ -40,6 +40,7 @@
                     <div class="mt-14">
                         <button
                             type="submit"
+                            @click.prevent="authStore.loginByEmail({email, password})"
                             class="w-full py-2 px-6 text-base font-semibold tracking-wider rounded-full text-white"
                             :class="{
                                 'bg-gray-400 cursor-not-allowed': !isFormValid,
@@ -60,8 +61,10 @@
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import CustomInput from '@/components/Input.vue';
+import {useAuthStore} from "@/stores/auth.store.ts";
 
 const { locale } = useI18n();
+const authStore = useAuthStore();
 
 const languages = {
     vi: {

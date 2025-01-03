@@ -38,8 +38,9 @@ class UserService {
 
     async logout(): Promise<[null, MessageResponseModel] | [Error]> {
         try {
-            const { data } = await this.httpClient.get<MessageResponseModel>(
+            const { data } = await this.httpClient.post<MessageResponseModel>(
                 `/logout`,
+                {},
                 { headers: axiosHeader() },
             );
             return [null, data];
