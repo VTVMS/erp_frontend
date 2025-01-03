@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', {
                 // Show toast notify here
                 setAuthToLocalStorage(result);
                 // this.startRefreshTokenTimer();
-                await router.push('/profile');
+                await router.push('/dashboards');
                 this.isLoggedIn = true;
             } catch (err) {
                 // Show toast error here

@@ -123,7 +123,7 @@ router.beforeEach((to, _, next) => {
     if (!authStore.isLoggedIn) {
         switch (to.name) {
             case 'Login':
-                next({ path: '/profile' });
+                next({ path: '/dashboards' });
                 break;
             default:
                 next();
