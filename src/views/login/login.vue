@@ -43,6 +43,7 @@
                         <button
                         @click="showToast"
                             type="submit"
+                            @click.prevent="authStore.loginByEmail({email, password})"
                             class="w-full py-2 px-6 text-base font-semibold tracking-wider rounded-full text-white"
                             :class="{
                                 'bg-gray-400 cursor-not-allowed': !isFormValid || isLoading,
@@ -72,6 +73,7 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import CustomInput from '@/components/Input.vue';
 import { useToast } from 'vue-toastification';
+import {useAuthStore} from "@/stores/auth.store.ts";
 
 const toast = useToast();
 
@@ -79,6 +81,7 @@ const showToast = () => {
   toast.success('Your message has been sent!');
 };
 const { locale } = useI18n();
+const authStore = useAuthStore();
 
 const languages = {
     vi: {
