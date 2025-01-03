@@ -2,6 +2,7 @@
     <div class="mt-2.5">
         <label :for="id" class="block text-base font-medium leading-6">
             {{ $t(label) }}
+            <span v-if="required" class="text-red-500">*</span>
         </label>
 
         <div class="mt-2.5">
@@ -83,8 +84,7 @@
             </div>
         </div>
         <div v-if="showError" class="text-red-500 text-sm mt-1">
-                              {{ $t(errorMessage) }}
-
+            {{ $t(errorMessage) }}
         </div>
     </div>
 </template>

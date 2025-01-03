@@ -5,7 +5,7 @@ import {useAuthStore} from "../stores/auth.store.ts";
 const routes = [
     {
         path: '/:pathMatch(.*)*',
-        redirect: '/employee/employee',
+        redirect: '/dashboards',
         meta: { requiresAuth: true },
     },
     {
@@ -14,19 +14,25 @@ const routes = [
         component: () => import('@/views/login/login.vue'),
     },
     {
+        path: '/dashboards',
+        name: 'dashboards',
+        component: () => import('@/views/dashboards/dashboards.vue'),
+        meta: { requiresAuth: false }, // trang yêu cầu đăng nhập thì dùng false nếu cần bảo mật đăng nhập thì thay băng true
+    },
+    {
         path: '/profile',
         name: 'Profile',
         component: () => import('@/views/profile/profile.vue'),
         meta: { requiresAuth: true },
     },
     {
-        path: '/employee/employee',
+        path: '/employee/employees',
         name: 'List-Employee',
-        component: () => import('@/views/employee/employee/employee.vue'),
-        meta: { requiresAuth: true },
+        component: () => import('@/views/employee/employees/employee.vue'),
+        meta: { requiresAuth: false }, // trang yêu cầu đăng nhập thì dùng false nếu cần bảo mật đăng nhập thì thay băng true
     },
     {
-        path: '/employee/department',
+        path: '/employee/departments',
         name: 'List-Department',
         component: () => import('@/views/employee/department/department.vue'),
         meta: { requiresAuth: true },
@@ -38,13 +44,13 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
-        path: '/catalog/category',
+        path: '/catalog/categories',
         name: 'Category',
         component: () => import('@/views/catalog/category/category.vue'),
         meta: { requiresAuth: true },
     },
     {
-        path: '/catalog/channel',
+        path: '/catalog/channels',
         name: 'Channel',
         component: () => import('@/views/catalog/channel/channel.vue'),
         meta: { requiresAuth: true },
