@@ -71,7 +71,9 @@ const vi = {
     errorFileMessage:'Trường này là bắt buộc',
     enterYourPassword:"Nhập mật khẩu của bạn",
     enterYourEmail:"Nhập email của bạn",
- 
+
+    after:'Sau',
+    before:'Trước'
 
 };
 
