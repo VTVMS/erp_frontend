@@ -239,7 +239,7 @@ function sortData() {
             </select>
 
             <div class="flex items-center space-x-2">
-                <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50">Trước</button>
+                <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50">{{ $t('before') }}</button>
                 <button
                     v-for="page in visiblePages"
                     :key="page"
@@ -252,7 +252,7 @@ function sortData() {
                 >
                     {{ page }}
                 </button>
-                <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50">Tiếp</button>
+                <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50">{{ $t('after') }}</button>
             </div>
         </div>
     </div>
