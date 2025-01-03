@@ -73,7 +73,9 @@ const vi = {
     enterYourEmail:"Nhập email của bạn",
 
     after:'Sau',
-    before:'Trước'
+    before:'Trước',
+
+    dashboards:"Tổng quan"
 
 };
 
