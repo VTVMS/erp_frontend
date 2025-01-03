@@ -1,11 +1,12 @@
-import {AxiosInstance} from 'axios';
-import {LoginByEmailRequest, TokenResponse} from "../model/auth.ts";
-import {REFRESH_TOKEN_LOCAL} from "../common/const.ts";
+import { AxiosInstance } from 'axios';
+import { LoginByEmailRequest, TokenResponse } from "../model/auth.model.ts";
+import { REFRESH_TOKEN_LOCAL } from "../common/const.ts";
+import { axiosInstance } from "../common/config.ts";
 
-export default class AuthService {
+class AuthService {
     constructor(private httpClient: AxiosInstance) {}
 
-    async login_by_email({email, password}: LoginByEmailRequest): Promise<[null, TokenResponse] | [Error]> {
+    async loginByEmail({email, password}: LoginByEmailRequest): Promise<[null, TokenResponse] | [Error]> {
         try {
             const { data } = await this.httpClient.post<TokenResponse>(
                 `/login_by_email`,
@@ -17,7 +18,7 @@ export default class AuthService {
         }
     }
 
-    async refresh_token(): Promise<[null, TokenResponse] | [Error]> {
+    async refreshToken(): Promise<[null, TokenResponse] | [Error]> {
         try {
             const { data } = await this.httpClient.post<TokenResponse>(
                 `/refresh_token`,
@@ -29,3 +30,5 @@ export default class AuthService {
         }
     }
 }
+
+export const authService = new AuthService(axiosInstance);
