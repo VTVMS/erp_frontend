@@ -28,43 +28,22 @@
             </div>
             <div class="flex flex-col justify-center items-center bg-white md:rounded-tl-[55px] md:rounded-bl-[55px] h-full">
                 <form class="max-w-lg w-full mx-auto">
-                    <div class="mb-12 flex justify-center">
+                    <div class="mb-8 flex justify-center">
                         <h3 class="text-gray-800 text-4xl font-extrabold">{{ $t('signIn') }}</h3>
                     </div>
-
-                    <!-- Email Input -->
                     <div>
-                        <div class="relative flex items-end">
-                            <CustomInput v-model="email" type="userName" label="email" placeholder="email" :required="true" :showError="showEmailError" @blur="checkEmail" class="w-full" />
-                        </div>
+                        <CustomInput label="Email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
                     </div>
-
-                    <!-- Password Input -->
-                    <div class="mt-3">
-                        <div class="relative flex items-center">
-                            <CustomInput v-model="password" type="password" label="password" placeholder="Enter your password" :required="true" :showError="showPasswordError" @blur="checkPassword" class="w-full" />
-                        </div>
+                    <div class="mt-6">
+                        <CustomInput label="password" placeholder="enterYourPassword" id="password" required v-model="password" type="password" />
                     </div>
-
-                    <!-- Remember me and Forgot password -->
-                    <div class="flex flex-wrap items-center justify-between gap-4 mt-6">
-                        <div class="flex items-center">
-                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                            <label for="remember-me" class="text-gray-800 ml-3 block text-sm">{{ $t('remember') }}</label>
-                        </div>
-                        <div>
-                            <a href="" class="text-blue-600 font-semibold text-sm hover:underline"> {{ $t('forgotPass') }} </a>
-                        </div>
-                    </div>
-
-                    <!-- Sign In Button -->
-                    <div class="mt-12">
+                    <div class="mt-14">
                         <button
-                            type="button"
-                            class="w-full py-3 px-6 text-sm font-semibold tracking-wider rounded-full text-white"
+                            type="submit"
+                            class="w-full py-2 px-6 text-base font-semibold tracking-wider rounded-full text-white"
                             :class="{
-                                'bg-gray-400 cursor-not-allowed': isFormValid,
-                                ' bg-gray-800 hover:bg-[#222] focus:outline-none': !isFormValid,
+                                'bg-gray-400 cursor-not-allowed': !isFormValid,
+                                'bg-gray-800 hover:bg-gray-900 focus:outline-none': isFormValid,
                             }"
                             :disabled="!isFormValid"
                         >
@@ -108,19 +87,7 @@ const changeLanguage = (lang: string) => {
 const email = ref('');
 const password = ref('');
 
-const showEmailError = ref(false);
-const showPasswordError = ref(false);
-
-const checkEmail = () => {
-    showEmailError.value = !password.value;
-};
-
-const checkPassword = () => {
-    showPasswordError.value = !password.value;
-};
-
-// Computed property để kiểm tra xem form có hợp lệ không
 const isFormValid = computed(() => {
-    return !email.value && !password.value && !showEmailError.value && !showPasswordError.value;
+    return email.value && password.value;
 });
 </script>
