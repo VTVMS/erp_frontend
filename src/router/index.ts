@@ -12,12 +12,13 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('@/views/login/login.vue'),
+        meta: { requiresAuth: false },
     },
     {
         path: '/dashboards',
         name: 'dashboards',
         component: () => import('@/views/dashboards/dashboards.vue'),
-        meta: { requiresAuth: false }, // trang yêu cầu đăng nhập thì dùng false nếu cần bảo mật đăng nhập thì thay băng true
+        meta: { requiresAuth: true },
     },
     {
         path: '/profile',
@@ -29,7 +30,7 @@ const routes = [
         path: '/employee/employees',
         name: 'List-Employee',
         component: () => import('@/views/employee/employees/employee.vue'),
-        meta: { requiresAuth: false }, // trang yêu cầu đăng nhập thì dùng false nếu cần bảo mật đăng nhập thì thay băng true
+        meta: { requiresAuth: true },
     },
     {
         path: '/employee/departments',
@@ -117,10 +118,7 @@ router.beforeEach((to, _, next) => {
 
     if (isRequiresAuth && !authStore.isLoggedIn) {
         next('/login');
-        return;
-    }
-
-    if (!authStore.isLoggedIn) {
+    } else if (authStore.isLoggedIn) {
         switch (to.name) {
             case 'Login':
                 next({ path: '/dashboards' });
@@ -129,10 +127,7 @@ router.beforeEach((to, _, next) => {
                 next();
                 break;
         }
-        return;
-    }
-
-    next();
+    } else next();
 });
 
 export default router;
