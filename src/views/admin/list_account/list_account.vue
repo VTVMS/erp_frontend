@@ -13,43 +13,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
             </div>
-            <div class="dropdown-nav">
-                <div class="dropdown-nav group relative">
-                    <div class="dropdown-toggle-nav">
-                        <div class="w-full flex justify-center border rounded-md bg-gray-200 p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="dropdown-content-nav border min-w-44 rounded-md right-0 absolute bg-gray-100 text-gray-800 shadow hidden group-hover:block z-50 p-2">
-                        <div class="flex flex-col justify-center space-y-2">
-                            <button type="button" class="inline-flex items-center border text-gray-700 justify-center min-w-40 rounded-md py-2 text-sm font-medium focus:outline-none bg-gray-200 hover:bg-gray-300" @click="sortData('checkStockCode')">
-                                <svg class="size-6 mr-1" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve" fill="#000000">
-                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                    <g id="SVGRepo_iconCarrier">
-                                        <line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="23" y1="26.1" x2="23" y2="5"></line>
-                                        <polyline fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="18.7,21.8 23,26.1 27.3,21.8 "></polyline>
-                                        <polyline fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="12,15 12,14 9.1,6 8.9,6 6,14 6,15 "></polyline>
-                                        <line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="6" y1="12" x2="12" y2="12"></line>
-                                        <polyline fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="5,18 12,18 12,19 6,25 6,26 13,26 "></polyline>
-                                    </g>
-                                </svg>
-                                {{ $t('sort') }} A
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                </svg>
-                                Z
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </template>
         <template #actions="{ row }">
             <button
@@ -97,88 +60,16 @@
         </template>
         <template #content>
             <div v-if="typeDialog === 'add'">
-                <div class="">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('name') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập họ và tên ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('email') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập thông tin email ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="position" class="block text-base font-medium leading-6">{{ $t('authorities') }}</label>
-                    <select
-                        id="position"
-                        v-model="selectPosition"
-                        name="user"
-                        autocomplete="country-name"
-                        class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                    >
-                        <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                            {{ position.position_name }}
-                        </option>
-                    </select>
-                </div>
+                <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
+                <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
+                <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
+                <SelectInput v-model="positions" :data="positions" label="positions" id="positions" />
             </div>
             <div v-if="typeDialog === 'edit'">
-                <div class="">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('name') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập họ và tên ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('email') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập thông tin email ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="position" class="block text-base font-medium leading-6">{{ $t('authorities') }}</label>
-                    <select
-                        id="position"
-                        v-model="selectPosition"
-                        name="user"
-                        autocomplete="country-name"
-                        class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                    >
-                        <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                            {{ position.position_name }}
-                        </option>
-                    </select>
-                </div>
+                <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
+                <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
+                <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
+                <SelectInput v-model="positions" :data="positions" label="department" id="department" />
             </div>
             <div v-if="typeDialog === 'delete'">
                 <p>{{ $t('titleDelete') }}</p>
@@ -211,7 +102,6 @@
                             d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
                         />
                     </svg>
-
                     {{ $t('delete') }}
                 </button>
             </div>
@@ -220,69 +110,74 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import TableComponent from '@/components/Table.vue';
 import Dialog from '@/components/Dialog.vue';
-
-const table = ref({
-    cols: [
-        { title: 'name', field: 'name', show: true, sort: true },
-        { title: 'email', field: 'email', show: true, sort: true },
-        { title: 'createEmployee', field: 'createEmployee', show: true, sort: true },
-        { title: 'createDate', field: 'createDate', show: true, sort: true },
-    ],
-    data: [
-        {
-            name: 'John Doe',
-            email: 'Stock updated',
-            createEmployee: 'John Doe',
-            createDate: '2024-01-01',
-        },
-    ],
-});
+import { format } from 'date-fns';
+import CustomInput from '@/components/Input.vue';
+import SelectInput from '@/components/Select.vue';
+import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/user.store';
 
 const isDialogOpen = ref(false);
 const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
-const newItem = ref('');
 const editedItem = ref('');
+const selectedUser = ref(null);
 
-const showImage = ref(false);
-const image = ref('');
-const avatar = ref<File | null>(null);
+const full_name = ref('');
+const email = ref('');
+const password = ref('');
+const positions = ref('f0c80740-2218-4757-b6af-4385a4dd90ca');
 
-const container = ref<HTMLElement | null>(null);
+const userStore = useUserStore();
 
-const onChange = (event: Event) => {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        avatar.value = file;
+onMounted(() => {
+    userStore.listUsers();
+});
 
-        // Hiển thị hình ảnh xem trước
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            if (e.target?.result) {
-                image.value = e.target.result as string;
-                showImage.value = true;
-            }
-        };
-        reader.readAsDataURL(file);
-    }
-};
+const table = ref({
+    cols: [
+        { title: 'name', field: 'full_name', show: true, sort: true },
+        { title: 'email', field: 'email', show: true, sort: true },
+        { title: 'createEmployee', field: 'createEmployee', show: true, sort: true },
+        { title: 'createDate', field: 'created_at', show: true, sort: true },
+    ],
+    data: computed(() => {
+        return userStore.userList.map((user) => ({
+            full_name: user?.full_name ?? 'Đang cập nhật...',
+            email: user?.email ?? 'Đang cập nhật...',
+            createEmployee: user?.createEmployee ?? 'Đang cập nhật...',
+            created_at: user?.created_at ? format(new Date(user.created_at), 'dd/MM/yyyy') : 'Đang cập nhật...',
+        }));
+    }),
+});
 
-const removeFile = () => {
-    showImage.value = false;
-    avatar.value = null;
-    image.value = '';
-};
-
-const openDialog = (type: 'add' | 'edit' | 'delete') => {
+const openDialog = (type: 'add' | 'edit' | 'delete', user?: any) => {
     typeDialog.value = type;
+    if (type === 'edit' || type === 'delete') {
+        selectedUser.value = user;
+        full_name.value = user.full_name;
+        email.value = user.email;
+        password.value = user.password;
+        positions.value = user.role_uuid;
+    } else {
+        full_name.value = '';
+        email.value = '';
+        positions.value = 'f0c80740-2218-4757-b6af-4385a4dd90ca';
+        password.value = '';
+    }
     isDialogOpen.value = true;
 };
 
-const handleAddItem = () => {
-    console.log('Adding item:', newItem.value);
+const handleAddItem = async () => {
+    await userStore.createUser({
+        email: email.value,
+        password: password.value,
+        full_name: full_name.value,
+        role_uuid: positions.value,
+        is_create_new_employee: false,
+    });
+    isDialogOpen.value = false;
 };
 
 const handleEditItem = () => {
@@ -291,22 +186,5 @@ const handleEditItem = () => {
 
 const handleDeleteItem = () => {
     console.log('Deleting item');
-    // Logic for deleting item
 };
-
-function sortData(field: string) {
-    table.value.data.sort((a: any, b: any) => {
-        const valueA = a[field]?.toString().toLowerCase() || '';
-        const valueB = b[field]?.toString().toLowerCase() || '';
-        return valueA.localeCompare(valueB);
-    });
-}
-
-const positions = ref([
-    { id: 1, position_name: 'Vị trí 1' },
-    { id: 2, position_name: 'Vị trí 2' },
-    { id: 3, position_name: 'Vị trí 3' },
-]);
-
-const selectPosition = ref('');
 </script>

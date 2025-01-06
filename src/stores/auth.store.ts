@@ -1,4 +1,4 @@
-import { format, add, isBefore, formatISO } from 'date-fns';
+import moment from "moment";
 import { defineStore } from 'pinia';
 import {
     ACCESS_TOKEN_LOCAL,
@@ -91,10 +91,10 @@ export const useAuthStore = defineStore('auth', {
         checkIsTokenIsValid() {
             try {
                 const accessToken = localStorage.getItem(ACCESS_TOKEN_LOCAL);
-                const expiredAt = formatISO(format(new Date(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL)), 'dd/MM/yyyy HH:mm:ss'));
-                const dateNow = formatISO(format(new Date(), 'dd/MM/yyyy HH:mm:ss'));
-                const isExpiredTime = isBefore(expiredAt, dateNow);
-                this.isLoggedIn = !!accessToken && isExpiredTime;
+                const expiredAt = moment.utc(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL));
+                const dateNow = moment().utc();
+                const isExpiredTime = expiredAt.diff(dateNow, 'seconds');
+                this.isLoggedIn = !!accessToken && isExpiredTime > 0;
             } catch (err) {
                 console.error(err);
                 clearAuthFromLocalStorage();
@@ -105,7 +105,7 @@ export const useAuthStore = defineStore('auth', {
 });
 
 const setAuthToLocalStorage = (token: TokenResponse) => {
-    const expiredAt = formatISO(format(add(new Date(), { seconds: token.expire_in }), 'dd/MM/yyyy HH:mm:ss'));
+    const expiredAt = moment().add(token.expire_in, 'seconds').format("DD-MM-YYYY HH:mm:ss");
     localStorage.setItem(ACCESS_TOKEN_LOCAL, token.access_token);
     localStorage.setItem(REFRESH_TOKEN_LOCAL, token.refresh_token);
     localStorage.setItem(EXPIRED_ACCESS_TOKEN_LOCAL, expiredAt);
