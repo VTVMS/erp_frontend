@@ -19,6 +19,8 @@ export const useUserStore = defineStore('user', {
                     this.error = 'Failed to user list';
                     console.error(error);
                 } else {
+                    console.log(result.data);
+                    
                     this.userList = result.data;
                     this.userList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                     this.error = null;

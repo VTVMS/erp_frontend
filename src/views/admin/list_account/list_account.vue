@@ -8,7 +8,7 @@
                 {{ $t('add') }}
             </button>
             <div class="relative mt-1">
-                <input type="text" id="searchInput" placeholder="Tìm kiếm ..." class="border border-gray-300 rounded-lg pl-10 w-full py-1" />
+                <input type="text" id="searchInput" placeholder="Tìm kiếm ..." class="border border-gray-300 rounded-lg pl-10 w-full py-1" @input="onSearchInput" />
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="absolute inset-y-0 left-0 w-5 h-5 text-gray-400 ml-2 my-auto">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
@@ -110,19 +110,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
-import TableComponent from '@/components/Table.vue';
-import Dialog from '@/components/Dialog.vue';
-import { format } from 'date-fns';
-import CustomInput from '@/components/Input.vue';
-import SelectInput from '@/components/Select.vue';
 import { onMounted } from 'vue';
-import { useUserStore } from '@/stores/user.store';
+import { ref, computed } from 'vue';
+import { format } from 'date-fns';
+import TableComponent from '../../../components/Table.vue';
+import Dialog from '../../../components/Dialog.vue';
+import CustomInput from '../../../components/Input.vue';
+import SelectInput from '../../../components/Select.vue';
+import { useUserStore } from '../../../stores/user.store';
 
 const isDialogOpen = ref(false);
 const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
 const editedItem = ref('');
 const selectedUser = ref(null);
+
+const searchQuery = ref('');
+const debounceTimeout = ref<NodeJS.Timeout | null>(null);
 
 const full_name = ref('');
 const email = ref('');
@@ -143,14 +146,33 @@ const table = ref({
         { title: 'createDate', field: 'created_at', show: true, sort: true },
     ],
     data: computed(() => {
-        return userStore.userList.map((user) => ({
-            full_name: user?.full_name ?? 'Đang cập nhật...',
-            email: user?.email ?? 'Đang cập nhật...',
-            createEmployee: user?.createEmployee ?? 'Đang cập nhật...',
-            created_at: user?.created_at ? format(new Date(user.created_at), 'dd/MM/yyyy') : 'Đang cập nhật...',
-        }));
+        return userStore.userList
+            .filter((user) => {
+                const searchTerm = searchQuery.value.toLowerCase();
+                return user?.full_name?.toLowerCase().includes(searchTerm) || user?.email?.toLowerCase().includes(searchTerm);
+            })
+            .map((user) => ({
+                full_name: user?.full_name ?? 'Đang cập nhật...',
+                email: user?.email ?? 'Đang cập nhật...',
+                createEmployee: user?.createEmployee ?? 'Đang cập nhật...',
+                created_at: user?.created_at ? format(new Date(user.created_at), 'dd/MM/yyyy') : 'Đang cập nhật...',
+            }));
     }),
 });
+
+const updateSearchQuery = (query: string) => {
+    if (debounceTimeout.value) {
+        clearTimeout(debounceTimeout.value);
+    }
+    debounceTimeout.value = setTimeout(() => {
+        searchQuery.value = query;
+    }, 500);
+};
+
+const onSearchInput = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    updateSearchQuery(input.value);
+};
 
 const openDialog = (type: 'add' | 'edit' | 'delete', user?: any) => {
     typeDialog.value = type;

@@ -2,8 +2,9 @@
     <div class="relative">
         <div class="home row justify-between py-3 flex items-center sm:flex-nowrap text-gray-200">
             <div class="sm:flex hidden ml-3">
-                <button @click="toggleSidebar" class="toggle-sidebar-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-3 dark:text-gray-300 text-gray-100">
+                <button @click="toggleSidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-3 dark:text-gray-300 text-gray-100"                 :class="{'rotate-90': isSidebarRotated}"  
+                        >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -28,9 +29,9 @@
                         <div class="dropdown-content-nav border min-w-44 rounded-md hidden absolute right-0 mr-3 bg-gray-100 text-gray-800 shadow group-hover:block z-50">
                             <div class="flex flex-col w-full py-1 px-1 gap-1">
                                 <Button type="profile" />
-                                <hr/>
+                                <hr />
                                 <Button type="changePass" />
-                                <hr/>
+                                <hr />
                                 <Button type="logout" @click.prevent="authStore.logout()" />
                             </div>
                         </div>
@@ -42,10 +43,10 @@
 </template>
 
 <script lang="ts" setup>
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
-import ColorSwitcher from '@/components/ColorSwitcher.vue';
-import Button from '@/components/Button.vue';
-import {useAuthStore} from "@/stores/auth.store.ts";
+import LanguageSwitcher from '../components/LanguageSwitcher.vue';
+import ColorSwitcher from '../components/ColorSwitcher.vue';
+import Button from '../components/Button.vue';
+import { useAuthStore } from '../stores/auth.store.ts';
 
 defineProps({
     toggleSidebar: {

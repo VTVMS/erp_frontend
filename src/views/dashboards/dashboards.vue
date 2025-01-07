@@ -13,7 +13,7 @@
   </template>
   
   <script lang="ts" setup>
-import ChartRound from '@/components/ChartRound.vue';
+import ChartRound from '../../components/ChartRound.vue';
 
   </script> 
   

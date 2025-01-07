@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import CustomTextField from '@/components/CustomFile.vue';
+import CustomTextField from './CustomFile.vue';
 
 const valid = ref(false);
 const firstname = ref('');
