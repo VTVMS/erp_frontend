@@ -33,14 +33,14 @@ class UserService {
     //     }
     // }
     
-    // async delete_user(userId: string): Promise<[null, UserModel] | [Error]> {
-    //     try {
-    //         const { data } = await this.httpClient.delete<UserModel>(`/admin/delete/${userId}`, { headers: axiosHeader() });
-    //         return [null, data];
-    //     } catch (error) {
-    //         return [error];
-    //     }
-    // }
+    async admin_delete_user(user_uuid: string): Promise<[null, MessageResponseModel] | [Error]> {
+        try {
+            const { data } = await this.httpClient.delete<MessageResponseModel>(`/admin/delete_user/${user_uuid}`, { headers: axiosHeader() });
+            return [null, data];
+        } catch (error) {
+            return [error];
+        }
+    }
 
     async get_profile(): Promise<[null, UserModel] | [Error]> {
         try {

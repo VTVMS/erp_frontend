@@ -63,13 +63,13 @@
                 <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
                 <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
                 <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
-                <SelectInput v-model="positions" :data="positions" label="positions" id="positions" />
+                <SelectInput v-model="positions" :data="positions" label="position" id="positions" />
             </div>
             <div v-if="typeDialog === 'edit'">
                 <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
                 <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
                 <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
-                <SelectInput v-model="positions" :data="positions" label="department" id="department" />
+                <SelectInput v-model="positions" :data="positions" label="position" id="positions" />
             </div>
             <div v-if="typeDialog === 'delete'">
                 <p>{{ $t('titleDelete') }}</p>
@@ -124,7 +124,7 @@ const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
 const editedItem = ref('');
 const selectedUser = ref(null);
 
-const searchQuery = ref('');
+const searchQuery = ref(''); 
 const debounceTimeout = ref<NodeJS.Timeout | null>(null);
 
 const full_name = ref('');
@@ -136,6 +136,8 @@ const userStore = useUserStore();
 
 onMounted(() => {
     userStore.listUsers();
+    console.log(userStore.listUsers());
+    
 });
 
 const table = ref({
@@ -144,8 +146,11 @@ const table = ref({
         { title: 'email', field: 'email', show: true, sort: true },
         { title: 'createEmployee', field: 'createEmployee', show: true, sort: true },
         { title: 'createDate', field: 'created_at', show: true, sort: true },
+        { title: 'status', field: 'status', show: true, sort: true },
+
     ],
     data: computed(() => {
+        // Filter the user list based on the search query
         return userStore.userList
             .filter((user) => {
                 const searchTerm = searchQuery.value.toLowerCase();
@@ -156,6 +161,8 @@ const table = ref({
                 email: user?.email ?? 'Đang cập nhật...',
                 createEmployee: user?.createEmployee ?? 'Đang cập nhật...',
                 created_at: user?.created_at ? format(new Date(user.created_at), 'dd/MM/yyyy') : 'Đang cập nhật...',
+                status: user?.status ?? 'Đang cập nhật...',
+
             }));
     }),
 });
@@ -176,6 +183,8 @@ const onSearchInput = (event: Event) => {
 
 const openDialog = (type: 'add' | 'edit' | 'delete', user?: any) => {
     typeDialog.value = type;
+    selectedUser.value = user;
+
     if (type === 'edit' || type === 'delete') {
         selectedUser.value = user;
         full_name.value = user.full_name;
@@ -207,6 +216,9 @@ const handleEditItem = () => {
 };
 
 const handleDeleteItem = () => {
-    console.log('Deleting item');
+  if (selectedUser.value) {
+    userStore.deleteUser(selectedUser.value.user_id);
+  }
+  isDialogOpen.value = false;
 };
 </script>

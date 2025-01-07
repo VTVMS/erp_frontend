@@ -50,5 +50,23 @@ export const useUserStore = defineStore('user', {
                 this.error = null;
             }
         },
+        async deleteUser(user_uuid: string) {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const [error, result] = await userService.admin_delete_user(user_uuid);
+                if (error) {
+                    this.error = 'Failed to delete user';
+                    console.error(error);
+                } else {
+                    this.userList = this.userList.filter(user => user.user_uuid !== user_uuid);
+                    this.error = null;
+                    this.isLoading = false;
+                }
+            } finally {
+                this.isLoading = false;
+                this.error = null;
+            }
+        },
     },
 });
