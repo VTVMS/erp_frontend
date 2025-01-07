@@ -7,6 +7,6 @@
 </template>
 
 <script lang="ts" setup>
-import LoginPage from '@/views/login/login.vue';
+import LoginPage from '../views/login/login.vue';
 
 </script>

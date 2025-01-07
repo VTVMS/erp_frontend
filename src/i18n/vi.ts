@@ -75,7 +75,9 @@ const vi = {
     after:'Sau',
     before:'Trước',
 
-    dashboards:"Tổng quan"
+    dashboards:"Tổng quan",
+    loginError: "Thông tin đăng nhập không đúng. Vui lòng kiểm tra lại!",
+
 
 };
 

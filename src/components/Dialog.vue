@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import Button from '@/components/Button.vue';
+import Button from './Button.vue';
 
 const props = defineProps({
     isOpen: {

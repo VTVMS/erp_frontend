@@ -246,7 +246,7 @@ function sortData() {
                     @click="changePage(page)"
                     :class="{
                         'px-3 py-1 rounded': true,
-                        'bg-[var(--color-10)] text-white': page === currentPage,
+                        'bg-[#d37b0e] text-gray-100': page === currentPage,
                         'bg-gray-300': page !== currentPage,
                     }"
                 >

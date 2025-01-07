@@ -104,11 +104,11 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import TableComponent from '@/components/Table.vue';
-import Dialog from '@/components/Dialog.vue';
-import ExpandablePanel from '@/components/ExpandablePanel.vue';
-import Button from '@/components/Button.vue';
-import CustomInput from '@/components/Input.vue';
+import TableComponent from '../../../components/Table.vue';
+import Dialog from '../../../components/Dialog.vue';
+import ExpandablePanel from '../../../components/ExpandablePanel.vue';
+import Button from '../../../components/Button.vue';
+import CustomInput from '../../../components/Input.vue';
 
 const table = ref({
     cols: [

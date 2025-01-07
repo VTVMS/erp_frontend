@@ -18,14 +18,17 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import SideBar from '@/components/SideBar.vue';
-import Head from '@/components/Header.vue';
-import Footer from '@/components/Footer.vue';
+import SideBar from '../components/Sidebar.vue';
+import Head from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
 
 const isSidebarVisible = ref(true);
+const isSidebarRotated = ref(false);
 
 const toggleSidebar = () => {
     isSidebarVisible.value = !isSidebarVisible.value;
+    isSidebarRotated.value = !isSidebarRotated.value;  // Cập nhật trạng thái xoay
+
 };
 </script>
 

@@ -14,9 +14,7 @@
                             <button @click="changeLanguage('vi')" class="flex items-center gap-x-1 py-2 text-sm border-b hover:bg-gray-200 border-gray-200 dark:hover:bg-gray-700 dark:border-gray-700">
                                 <img :src="languages.vi.imgSrc" alt="Vietnamese" class="w-12 h-6 px-2 object-cover" /> {{ languages.vi.name }}
                             </button>
-                            <button @click="changeLanguage('en')" class="flex items-center gap-x-1 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 dark:border-gray-700">
-                                <img :src="languages.en.imgSrc" alt="Vietnamese" class="w-12 h-6 px-2 object-cover" /> {{ languages.en.name }}
-                            </button>
+                            <button @click="changeLanguage('en')" class="flex items-center gap-x-1 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 dark:border-gray-700"><img :src="languages.en.imgSrc" alt="Vietnamese" class="w-12 h-6 px-2 object-cover" /> {{ languages.en.name }}</button>
                         </div>
                     </div>
                 </div>
@@ -41,9 +39,8 @@
                     </div>
                     <div class="mt-14">
                         <button
-                        @click="showToast"
                             type="submit"
-                            @click.prevent="authStore.loginByEmail({email, password})"
+                            @click.prevent="authStore.loginByEmail({ email, password })"
                             class="w-full py-2 px-6 text-base font-semibold tracking-wider rounded-full text-white"
                             :class="{
                                 'bg-gray-400 cursor-not-allowed': !isFormValid || isLoading,
@@ -60,7 +57,6 @@
                                 {{ $t('loading') }}
                             </span>
                         </button>
-
                     </div>
                 </form>
             </div>
@@ -71,15 +67,15 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import CustomInput from '@/components/Input.vue';
-import { useToast } from 'vue-toastification';
-import {useAuthStore} from "@/stores/auth.store.ts";
+import CustomInput from '../../components/Input.vue';
+// import { useToast } from 'vue-toastification';
+import { useAuthStore } from '../../stores/auth.store.ts';
 
-const toast = useToast();
+// const toast = useToast();
 
-const showToast = () => {
-  toast.success('Your message has been sent!');
-};
+// const showToast = () => {
+//   toast.success('Your message has been sent!');
+// };
 const { locale } = useI18n();
 const authStore = useAuthStore();
 

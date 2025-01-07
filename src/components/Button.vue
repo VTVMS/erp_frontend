@@ -1,11 +1,10 @@
 <template>
-    <button :class="[' text-gray-100 rounded-lg flex  items-center hover:scale-105 hover:shadow-sm transition-transform duration-300', buttonClass]"  >
+    <button :class="[' text-gray-100 rounded-lg flex  items-center hover:scale-105 hover:shadow-sm transition-transform duration-300', buttonClass]">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
             <path v-if="iconPath" :d="iconPath" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         {{ $t(buttonText) }}
     </button>
-    
 </template>
 
 <script lang="ts" setup>
@@ -13,7 +12,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     type: {
-        type: String as () => 'save' | 'edit' | 'delete' | 'cancel' | 'add' | 'actionEdit' | 'actionDelete',
+        type: String as () => 'save' | 'edit' | 'delete' | 'cancel' | 'add' | 'actionEdit' | 'actionDelete' | 'logout' | 'profile' | 'changePass',
         default: 'save',
     },
 });
