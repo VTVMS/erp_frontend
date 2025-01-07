@@ -1,7 +1,7 @@
 <template>
     <div class=" h-full">
       <h1>{{ $t('welcome') }}</h1>
-      <p>{{ $t('employee') }}</p>
+      <p>{{ $t('category') }}</p>
     </div>
   </template>
   

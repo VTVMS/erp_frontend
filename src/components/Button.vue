@@ -12,7 +12,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     type: {
-        type: String as () => 'save' | 'edit' | 'delete' | 'cancel' | 'add' | 'actionEdit' | 'actionDelete',
+        type: String as () => 'save' | 'edit' | 'delete' | 'cancel' | 'add' | 'actionEdit' | 'actionDelete' | 'logout' | 'profile' | 'changePass',
         default: 'save',
     },
 });

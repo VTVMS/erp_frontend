@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import TableComponent from '@/components/Table.vue';
-import Dialog from '@/components/Dialog.vue';
-import CustomInput from '@/components/Input.vue';
-import SelectInput from '@/components/Select.vue';
-import Button from '@/components/Button.vue';
+import TableComponent from '../../../components/Table.vue';
+import Dialog from '../../../components/Dialog.vue';
+import CustomInput from '../../../components/Input.vue';
+import SelectInput from '../../../components/Select.vue';
+import Button from '../../../components/Button.vue';
 
 const table = ref({
     cols: [
@@ -181,9 +181,9 @@ const positions = [
         </template>
         <template #content>
             <div v-if="typeDialog === 'add'">
-                <CustomInput v-model="name" type="text" label="name" placeholder="name" />
+                <CustomInput v-model="name" type="text" label="name" placeholder="name" required/>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <CustomInput v-model="password" type="text" label="password" placeholder="password" />
+                    <CustomInput v-model="password" type="text" label="password" placeholder="password"  required/>
                     <SelectInput v-model="position" :data="positions" label="position" id="position" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">

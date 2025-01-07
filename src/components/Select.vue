@@ -51,9 +51,9 @@ const { label, data, value, id, name, autocomplete } = toRefs(props);
 
 const selectedValue = computed({
     get: () => value.value,
-    set: (newValue) => {
-        emit('update:value', newValue);
-    },
+    // set: (newValue) => {
+    //     emit('update:value', newValue);
+    // },
 });
 </script>
 

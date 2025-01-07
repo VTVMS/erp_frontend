@@ -68,6 +68,16 @@ const vi = {
     addDepartment:"Thêm phòng ban",
     editDepartment:"Cập nhật phòng ban",
     deleteDepartment:"Xoá phòng ban",
+    errorFileMessage:'Trường này là bắt buộc',
+    enterYourPassword:"Nhập mật khẩu của bạn",
+    enterYourEmail:"Nhập email của bạn",
+
+    after:'Sau',
+    before:'Trước',
+
+    dashboards:"Tổng quan",
+    loginError: "Thông tin đăng nhập không đúng. Vui lòng kiểm tra lại!",
+
 
 };
 
