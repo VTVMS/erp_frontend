@@ -7,16 +7,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useAuthStore } from './stores/auth.store.js';
 import MainLayout from './layout/Layout.vue';
 import AuthLayout from './layout/AuthLayout.vue';
 
 const authStore = useAuthStore();
-
-onMounted(() => {
-    authStore.checkIsTokenIsValid();
-});
 
 const layout = computed(() => {
     return authStore.isLoggedIn ? MainLayout : AuthLayout;

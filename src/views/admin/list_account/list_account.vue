@@ -25,7 +25,7 @@
                 </svg>
             </button>
             <button
-                @click="openDialog('delete')"
+                @click="openDialog('delete', row.user_uuid)"
                 type="button"
                 class="inline-flex items-center border text-red-400 border-red-300 justify-center px-1 rounded-md py-1 text-basemarker: font-medium focus:outline-none bg-gray-100 hover:bg-gray-100 hover:scale-105 hover:shadow-lg transition-transform duration-300"
             >
@@ -112,7 +112,6 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { ref, computed } from 'vue';
-import { format } from 'date-fns';
 import TableComponent from '../../../components/Table.vue';
 import Dialog from '../../../components/Dialog.vue';
 import CustomInput from '../../../components/Input.vue';
@@ -122,22 +121,21 @@ import { useUserStore } from '../../../stores/user.store';
 const isDialogOpen = ref(false);
 const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
 const editedItem = ref('');
-const selectedUser = ref(null);
+const selectedRow = ref<Record<string, any> | null>(null);
 
-const searchQuery = ref(''); 
+const searchQuery = ref('');
 const debounceTimeout = ref<NodeJS.Timeout | null>(null);
 
 const full_name = ref('');
 const email = ref('');
 const password = ref('');
 const positions = ref('f0c80740-2218-4757-b6af-4385a4dd90ca');
-
+const user_uuid = ref('');
 const userStore = useUserStore();
 
 onMounted(() => {
     userStore.listUsers();
     console.log(userStore.listUsers());
-    
 });
 
 const table = ref({
@@ -145,9 +143,8 @@ const table = ref({
         { title: 'name', field: 'full_name', show: true, sort: true },
         { title: 'email', field: 'email', show: true, sort: true },
         { title: 'createEmployee', field: 'createEmployee', show: true, sort: true },
-        { title: 'createDate', field: 'created_at', show: true, sort: true },
-        { title: 'status', field: 'status', show: true, sort: true },
-
+        { title: 'createDate', field: 'created_at',type:'date', show: true, sort: true },
+        { title: 'status', field: 'status', type: 'status', show: true, sort: true },
     ],
     data: computed(() => {
         // Filter the user list based on the search query
@@ -157,12 +154,12 @@ const table = ref({
                 return user?.full_name?.toLowerCase().includes(searchTerm) || user?.email?.toLowerCase().includes(searchTerm);
             })
             .map((user) => ({
-                full_name: user?.full_name ?? 'Đang cập nhật...',
-                email: user?.email ?? 'Đang cập nhật...',
-                createEmployee: user?.createEmployee ?? 'Đang cập nhật...',
-                created_at: user?.created_at ? format(new Date(user.created_at), 'dd/MM/yyyy') : 'Đang cập nhật...',
-                status: user?.status ?? 'Đang cập nhật...',
-
+                user_uuid: user?.user_uuid,
+                full_name: user?.full_name ,
+                email: user?.email ,
+                createEmployee: user?.createEmployee ,
+                created_at:   user?.created_at ,
+                status: user?.status,
             }));
     }),
 });
@@ -180,24 +177,24 @@ const onSearchInput = (event: Event) => {
     const input = event.target as HTMLInputElement;
     updateSearchQuery(input.value);
 };
-
-const openDialog = (type: 'add' | 'edit' | 'delete', user?: any) => {
+const openDialog = (type: 'add' | 'edit' | 'delete', userOrRow?: Record<string, any>) => {
     typeDialog.value = type;
-    selectedUser.value = user;
+    isDialogOpen.value = true;
 
-    if (type === 'edit' || type === 'delete') {
-        selectedUser.value = user;
-        full_name.value = user.full_name;
-        email.value = user.email;
-        password.value = user.password;
-        positions.value = user.role_uuid;
+    if (userOrRow) {
+        selectedRow.value = userOrRow;
+        full_name.value = userOrRow.full_name || '';
+        email.value = userOrRow.email || '';
+        password.value = userOrRow.password || '';
+        positions.value = userOrRow.role_uuid || '';
+        user_uuid.value = userOrRow.user_uuid || '';
     } else {
+        selectedRow.value = null;
         full_name.value = '';
         email.value = '';
-        positions.value = 'f0c80740-2218-4757-b6af-4385a4dd90ca';
         password.value = '';
+        positions.value = 'f0c80740-2218-4757-b6af-4385a4dd90ca'; // Giá trị mặc định
     }
-    isDialogOpen.value = true;
 };
 
 const handleAddItem = async () => {
@@ -216,9 +213,10 @@ const handleEditItem = () => {
 };
 
 const handleDeleteItem = () => {
-  if (selectedUser.value) {
-    userStore.deleteUser(selectedUser.value.user_id);
-  }
-  isDialogOpen.value = false;
+    if (selectedRow.value) {
+        console.log('Deleting:', selectedRow.value);
+        userStore.deleteUser(selectedRow.value);
+    }
+    isDialogOpen.value = false;
 };
 </script>
