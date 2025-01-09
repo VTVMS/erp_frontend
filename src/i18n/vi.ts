@@ -20,6 +20,7 @@ const vi = {
     listPosition: 'Danh sách chức vụ',
     total: 'Tổng',
     action: 'Chức năng',
+    stt:'STT',
     catalog: 'Danh mục',
     list_account: 'Danh sách tài khoản',
     cancel: 'Đóng',
@@ -27,6 +28,7 @@ const vi = {
     edit: 'Chỉnh sửa',
     delete: 'Xoá',
     sort: 'Sắp xếp',
+    buttonDefaut:'',
 
     avatar: 'Ảnh đại diện',
     codeEmployee: 'Mã nhân viên',
@@ -71,6 +73,15 @@ const vi = {
     errorFileMessage:'Trường này là bắt buộc',
     enterYourPassword:"Nhập mật khẩu của bạn",
     enterYourEmail:"Nhập email của bạn",
+    entercodeEmployee:"Nhập mã nhân viên",
+    enterYourPhone:"Nhập số điện thoại của bạn",
+    enterDepartment:"Nhập phòng ban",
+    enterPosition:"Nhập vị trí",
+    enterAddress:"Nhập địa chỉ",
+    enterName:"Nhập họ và tên",
+    select_gender: "Chọn giới tính",
+    male: "Nam",
+    female: "Nữ",
 
     after:'Sau',
     before:'Trước',
@@ -80,7 +91,8 @@ const vi = {
     isActive:'Đang hoạt động',
     stopWorking:'Ngừng hoạt động',
     unknown:'Không khác định',
-    updating:'Đang cập nhật ...'
+    updating:'Đang cập nhật ...',
+    placeSearch:'Tìm kiếm ...'
 };
 
 export default vi;

@@ -42,7 +42,14 @@ class UserService {
         }
     }
 
-    async update_profile() {}
+    async update_profile(updatedData: UserModel): Promise<[null] | [Error]> {
+        try {
+            const { data } = await this.httpClient.put<UserModel>(`/me`, updatedData, { headers: axiosHeader() });
+            return [null];
+        } catch (error) {
+            return [error];
+        }
+    }
 
     async logout(): Promise<[null, MessageResponseModel] | [Error]> {
         try {

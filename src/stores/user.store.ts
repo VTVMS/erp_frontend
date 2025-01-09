@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { userService } from '../services/user.service.ts';
 import { UserModel, AdminCreateNewUserRequest } from '../model/user.model.ts';
-import { object } from '@amcharts/amcharts5';
+import { useToast } from 'vue-toastification';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -14,33 +14,37 @@ export const useUserStore = defineStore('user', {
         async listUsers() {
             this.isLoading = true;
             this.error = null;
+
             try {
                 const [error, result] = await userService.admin_get_list_users();
                 if (error) {
                     this.error = 'Failed to user list';
-                    console.error(error);
-                } else {
-                    console.log(result.data);
-
-                    this.userList = result.data;
-                    this.userList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                    this.error = null;
                     this.isLoading = false;
+                    console.error(error);
+                    return;
                 }
+                this.userList = result.data.reverse();
+                this.error = null;
+                this.isLoading = false;
+            } catch (err) {
+                this.error = 'An unexpected error occurred';
+                console.error(err);
             } finally {
                 this.isLoading = false;
                 this.error = null;
             }
         },
-
         async createUser(payload: AdminCreateNewUserRequest) {
+            const toast = useToast();
             this.isLoading = true;
             this.error = null;
+
             try {
                 const [error, result] = await userService.admin_create_new_user(payload);
                 if (error) {
                     this.error = 'Failed to create user';
                     console.error(error);
+                    toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
                 } else {
                     this.userList.unshift(result);
                     this.error = null;
@@ -56,8 +60,6 @@ export const useUserStore = defineStore('user', {
             this.error = null;
             try {
                 const [error, result] = await userService.admin_delete_user(user_uuid);
-                console.log(result,'result');
-                
                 if (error) {
                     this.error = 'Failed to delete user';
                     console.error(error);
@@ -65,21 +67,21 @@ export const useUserStore = defineStore('user', {
                     // this.userList = this.userList.filter((user) => user.user_uuid !== user_uuid);
                     this.userList = this.userList.map((user) => {
                         if (user.user_uuid === user_uuid) {
-                            return Object.assign({},result);
+                            return Object.assign({}, result);
                         }
-                        
-                        return Object.assign({},user);;
+
+                        return Object.assign({}, user);
                     });
-                    console.log(this.userList);
                     this.error = null;
+                    this.isLoading = false;
                 }
             } catch (err) {
                 this.error = 'An unexpected error occurred';
                 console.error(err);
             } finally {
                 this.isLoading = false;
+                this.error = null;
             }
         },
     },
 });
-// map -> if user.uuid === user_uuid -> return result else user 

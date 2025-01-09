@@ -20,17 +20,17 @@ const props = defineProps({
 const visibleCols = computed(() => {
     const cols = [...props.table.cols.filter((col) => col.show)];
     if (!cols.some((col) => col.field === 'index')) {
-        cols.unshift({ title: 'STT', field: 'index', show: true });
+        cols.unshift({ title: 'stt', field: 'index', show: true });
     }
     if (!cols.some((col) => col.field === 'action')) {
-        cols.push({ title: 'Chức năng', field: 'action', show: true });
+        cols.push({ title: 'action', field: 'action', show: true });
     }
     return cols;
 });
 
 // Phân trang
-const currentPage = ref(1); // Trang hiện tại
-const rowsPerPage = ref(20); // Số hàng mỗi trang
+const currentPage = ref(1);
+const rowsPerPage = ref(20);
 const totalPages = computed(() => Math.ceil(props.table.data.length / rowsPerPage.value));
 
 const paginatedData = computed(() => {
