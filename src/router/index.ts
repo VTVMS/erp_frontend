@@ -111,9 +111,9 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, _, next) => {
+router.beforeEach(async (to, _, next) => {
     const authStore = useAuthStore();
-    authStore.checkIsTokenIsValid();
+    await authStore.checkIsTokenIsValid();
     const isRequiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
     if (isRequiresAuth && !authStore.isLoggedIn) {

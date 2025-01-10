@@ -9,7 +9,6 @@ import { useToast } from 'vue-toastification';
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         isLoggedIn: false,
-        refreshTokenTimeout: null,
     }),
     actions: {
         async loginByEmail(payload: LoginByEmailRequest) {
@@ -27,13 +26,11 @@ export const useAuthStore = defineStore('auth', {
                 }
                 toast.success('Đăng nhập thành công!');
                 setAuthToLocalStorage(result);
-                this.startRefreshTokenTimer();
                 await router.push('/dashboards');
                 this.isLoggedIn = true;
             } catch (err) {
                 toast.error('Đã xảy ra lỗi hệ thống!');
                 console.error(err);
-                this.stopRefreshTokenTimer();
                 this.isLoggedIn = false;
             }
         },
@@ -44,33 +41,18 @@ export const useAuthStore = defineStore('auth', {
                     // Show toast error here
                     console.error(error);
                     clearAuthFromLocalStorage();
-                    this.stopRefreshTokenTimer();
                     this.isLoggedIn = false;
                     await router.push('/login');
                     return;
                 }
                 setAuthToLocalStorage(result);
-                this.startRefreshTokenTimer();
             } catch (err) {
                 // Show toast error here
                 console.error(err);
                 clearAuthFromLocalStorage();
-                this.stopRefreshTokenTimer();
                 this.isLoggedIn = false;
                 await router.push('/login');
             }
-        },
-        startRefreshTokenTimer() {
-            try {
-                const expiredAt = new Date(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL) as string);
-                const timeout = expiredAt.getTime() - Date.now() - (60 * 1000);
-                this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
-            } catch (err) {
-                console.error(err);
-            }
-        },
-        stopRefreshTokenTimer() {
-            clearTimeout(this.refreshTokenTimeout);
         },
         async logout() {
             try {
@@ -82,29 +64,34 @@ export const useAuthStore = defineStore('auth', {
                 }
                 // Show toast notify here
                 clearAuthFromLocalStorage();
-                this.stopRefreshTokenTimer();
                 this.isLoggedIn = false;
                 await router.push('/login');
             } catch (err) {
                 console.error(err);
             }
         },
-        checkIsTokenIsValid() {
+        async checkIsTokenIsValid() {
             try {
                 const accessToken = localStorage.getItem(ACCESS_TOKEN_LOCAL);
-                const expiredAt = formatISO(format(new Date(localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL) as string), 'dd/MM/yyyy HH:mm:ss'));
+                const expiredLocalStorageTime = localStorage.getItem(EXPIRED_ACCESS_TOKEN_LOCAL);
                 const dateNow = formatISO(format(new Date(), 'dd/MM/yyyy HH:mm:ss'));
-                const isExpiredTime = isBefore(expiredAt, dateNow);
-                if (!!accessToken && isExpiredTime) {
+                const expiredAt = expiredLocalStorageTime ? formatISO(format(new Date(expiredLocalStorageTime as string), 'dd/MM/yyyy HH:mm:ss')) : dateNow;
+                const isValidToken = isBefore(expiredAt, dateNow);
+
+                if (!!accessToken && isValidToken) {
                     this.isLoggedIn = true;
-                    this.startRefreshTokenTimer();
-                } else {
-                    this.isLoggedIn = false;
+                    return;
                 }
+
+                if (!!accessToken && !isValidToken) {
+                    await this.refreshToken();
+                    return;
+                }
+
+                this.isLoggedIn = false;
             } catch (err) {
                 console.error(err);
                 clearAuthFromLocalStorage();
-                this.stopRefreshTokenTimer();
                 this.isLoggedIn = false;
             }
         },
