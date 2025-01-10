@@ -77,6 +77,7 @@ export const useAuthStore = defineStore('auth', {
                 const dateNow = formatISO(format(new Date(), 'dd/MM/yyyy HH:mm:ss'));
                 const expiredAt = expiredLocalStorageTime ? formatISO(format(new Date(expiredLocalStorageTime as string), 'dd/MM/yyyy HH:mm:ss')) : dateNow;
                 const isValidToken = isBefore(expiredAt, dateNow);
+console.log(isValidToken);
 
                 if (!!accessToken && isValidToken) {
                     this.isLoggedIn = true;

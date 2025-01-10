@@ -5,12 +5,13 @@ import { useToast } from 'vue-toastification';
 
 export const useProfileStore = defineStore('profile', {
     state: () => ({
-        profile: {} as UserModel[],
+        profile: {} as UserModel,
         error: null as string | null,
         isLoading: false,
     }),
     actions: {
         async profileUsers() {
+            if(this.isLoading) return;
             this.isLoading = true;
             this.error = null;
             try {
@@ -31,6 +32,7 @@ export const useProfileStore = defineStore('profile', {
         },
         async updateUser(updatedData: UserModel) {
             const toast = useToast();
+            if(this.isLoading) return;
             this.isLoading = true;
             this.error = null;
             try {
