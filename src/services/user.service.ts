@@ -17,30 +17,21 @@ class UserService {
 
     async admin_get_list_users(): Promise<[null, UserModel[]] | [Error]> {
         try {
-            const { data } = await this.httpClient.get<UserModel[]>(`/admin/list_users?page_num=0&page_size=20`, { headers: axiosHeader() });            
+            const { data } = await this.httpClient.get<UserModel[]>(`/admin/list_users?page_num=0&page_size=20`, { headers: axiosHeader() });
             return [null, data];
         } catch (error) {
             return [error];
         }
     }
 
-    // async update_user(userId: string, payload: Partial<UserModel>): Promise<[null, UserModel] | [Error]> {
-    //     try {
-    //         const { data } = await this.httpClient.put<UserModel>(`/admin/edit/${userId}`, { ...payload }, { headers: axiosHeader() });
-    //         return [null, data];
-    //     } catch (error) {
-    //         return [error];
-    //     }
-    // }
-    
-    // async delete_user(userId: string): Promise<[null, UserModel] | [Error]> {
-    //     try {
-    //         const { data } = await this.httpClient.delete<UserModel>(`/admin/delete/${userId}`, { headers: axiosHeader() });
-    //         return [null, data];
-    //     } catch (error) {
-    //         return [error];
-    //     }
-    // }
+    async admin_delete_user(user_uuid: string): Promise<[null, MessageResponseModel] | [Error]> {
+        try {
+            const { data } = await this.httpClient.delete<MessageResponseModel>(`/admin/delete_user/${user_uuid}`, { headers: axiosHeader() });
+            return [null, data];
+        } catch (error) {
+            return [error];
+        }
+    }
 
     async get_profile(): Promise<[null, UserModel] | [Error]> {
         try {
@@ -51,7 +42,14 @@ class UserService {
         }
     }
 
-    async update_profile() {}
+    async update_profile(updatedData: UserModel): Promise<[null] | [Error]> {
+        try {
+            const { data } = await this.httpClient.put<UserModel>(`/me`, updatedData, { headers: axiosHeader() });
+            return [null];
+        } catch (error) {
+            return [error];
+        }
+    }
 
     async logout(): Promise<[null, MessageResponseModel] | [Error]> {
         try {

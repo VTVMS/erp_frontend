@@ -26,14 +26,14 @@
                                 <div class="font-medium">{{ row.code }}</div>
                                 <div class="text-gray-600 text-sm">{{ row.name }}</div>
                             </div>
-                            <div class="relative inline-block group">
-                                <button class="text-base cursor-pointer" id="dropdownButton">
+                            <div class="relative inline-block">
+                                <button class="text-base cursor-pointer" @click="toggleDropdown($event)">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75.75 0 0 1 0 1.5Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                     </svg>
                                 </button>
-                                <div class="dropdown-content text-sm fixed hidden min-w-[100px] mt-[-50px] z-10 ml-7 rounded-lg bg-gray-200 shadow-[0px_16px_16px_7px_rgba(48,48,48,0.2)] group-hover:block">
-                                    <button class="flex items-center rounded-b-xl w-full text-black px-2 py-2 no-underline text-sm hover:bg-[#f6f5f5]">
+                                <div v-if="dropdownVisible" class="dropdown-content text-sm fixed z-10 mt-2 rounded-lg bg-gray-200 " :style="dropdownStyle">
+                                    <button class="flex items-center rounded-b-xl w-full text-black px-2 py-2 no-underline text-sm">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                                             <path
                                                 stroke-linecap="round"
@@ -56,6 +56,7 @@
         </transition>
     </div>
 </template>
+
 <script lang="ts" setup>
 import { ref } from 'vue';
 
@@ -68,6 +69,8 @@ defineProps({
 
 const isExpanded = ref(true);
 const check = ref<number | null>(null);
+const dropdownVisible = ref(false);
+const dropdownStyle = ref<{ top: string; left: string }>({ top: ' 0px', left: '6px'});
 
 function togglePanel() {
     isExpanded.value = !isExpanded.value;
@@ -80,4 +83,14 @@ function onCheckItem(id: number) {
 function handleAdd() {
     console.log('Add action');
 }
+
+function toggleDropdown(event: MouseEvent) {
+    const buttonRect = (event.target as HTMLElement).getBoundingClientRect();
+    dropdownStyle.value = {
+        top: `${buttonRect.bottom + window.scrollY }px`,
+        left: `${buttonRect.left + window.scrollX}px`,
+    };
+    dropdownVisible.value = !dropdownVisible.value;
+}
 </script>
+
