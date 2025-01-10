@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { userService } from '../services/user.service.ts';
 import { UserModel, AdminCreateNewUserRequest } from '../model/user.model.ts';
+import { object } from '@amcharts/amcharts5';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -20,7 +21,7 @@ export const useUserStore = defineStore('user', {
                     console.error(error);
                 } else {
                     console.log(result.data);
-                    
+
                     this.userList = result.data;
                     this.userList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                     this.error = null;
@@ -50,5 +51,35 @@ export const useUserStore = defineStore('user', {
                 this.error = null;
             }
         },
+        async deleteUser(user_uuid: string) {
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const [error, result] = await userService.admin_delete_user(user_uuid);
+                console.log(result,'result');
+                
+                if (error) {
+                    this.error = 'Failed to delete user';
+                    console.error(error);
+                } else {
+                    // this.userList = this.userList.filter((user) => user.user_uuid !== user_uuid);
+                    this.userList = this.userList.map((user) => {
+                        if (user.user_uuid === user_uuid) {
+                            return Object.assign({},result);
+                        }
+                        
+                        return Object.assign({},user);;
+                    });
+                    console.log(this.userList);
+                    this.error = null;
+                }
+            } catch (err) {
+                this.error = 'An unexpected error occurred';
+                console.error(err);
+            } finally {
+                this.isLoading = false;
+            }
+        },
     },
 });
+// map -> if user.uuid === user_uuid -> return result else user 

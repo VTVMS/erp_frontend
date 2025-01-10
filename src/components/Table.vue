@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import * as XLSX from 'xlsx';
+import { format } from 'date-fns';
 
 // Props
 const props = defineProps({
@@ -79,8 +80,8 @@ const visiblePages = computed(() => {
 });
 
 // Chuyển đổi định dạng ngày
-function formatDate(date: string) {
-    return new Date(date).toLocaleDateString();
+function formatDate(date: string): string {
+    return format(new Date(date), 'dd/MM/yyyy');
 }
 
 // Chuyển trang
@@ -216,9 +217,17 @@ function sortData() {
                             <div v-else-if="col.type === 'img'" class="flex justify-center items-center">
                                 <img v-if="row[col.field]" :src="row[col.field]" alt="Image" class="w-9 h-9 rounded-full object-cover" />
                             </div>
+                            <span v-if="col.type === 'status'" class="flex justify-center ">
+                                <div v-show="row[col.field] === 1" class="bg-blue-500 text-white px-2 py-1 rounded-xl min-w-40 flex justify-center items-center">{{ $t('isActive') }}</div>
 
-                            <span v-if="col.type !== 'action' && col.type !== 'date' && col.field !== 'avatar'" class="flex justify-center">
-                                {{ row[col.field] }}
+                                <div v-show="row[col.field] === 0" class="bg-red-500 text-white px-2 py-1 rounded-xl  min-w-40 flex justify-center items-center">{{ $t('stopWorking') }}</div>
+
+                                <div v-show="row[col.field] !== 0 && row[col.field] !== 1" class="text-gray-500 px-2 py-1 rounded-md">{{ $t('unknown') }}</div>
+                            </span>
+
+                            <span v-if="col.type !== 'action' && col.field !== 'index' && col.type !== 'date' && col.type !== 'status' && col.field !== 'avatar'" class=" flex justify-center">
+                                <div v-if="row[col.field]" class="px-2 py-1">{{ row[col.field] }}</div>
+                                <div v-else class="px-2 py-1 text-gray-500">{{$t('updating')}}</div>
                             </span>
                         </template>
                     </td>

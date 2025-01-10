@@ -74,11 +74,13 @@ const vi = {
 
     after:'Sau',
     before:'Trước',
-
+    status:'Trạng thái',
     dashboards:"Tổng quan",
     loginError: "Thông tin đăng nhập không đúng. Vui lòng kiểm tra lại!",
-
-
+    isActive:'Đang hoạt động',
+    stopWorking:'Ngừng hoạt động',
+    unknown:'Không khác định',
+    updating:'Đang cập nhật ...'
 };
 
 export default vi;

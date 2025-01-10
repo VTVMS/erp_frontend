@@ -73,7 +73,9 @@ const en = {
   enterYourEmail: 'Enter your email',
 
   after: 'After',
-  before: 'Before'
+  before: 'Before',
+  dashboards:"Dashboards",
+
 };
 
 export default en;

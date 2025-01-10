@@ -13,7 +13,7 @@ export interface AdminCreateNewUserRequest {
 }
 
 export class UserModel {
-    user_id!: string;
+    user_uuid!: string;
     email!: string;
     full_name!: string;
     gender?: string;
