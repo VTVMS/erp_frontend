@@ -63,40 +63,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref ,onMounted, computed} from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { useProfileStore } from '../stores/profile.store';
-const profileStore = useProfileStore();
-const role_uuid = ref<number | null>(null);
 
-onMounted(async () => {
-    await profileStore.profileUsers();
-    const user = profileStore.profile;
-    role_uuid.value = user.role_uuid;
-    console.log(role_uuid.value)
-
-});
-const routes = computed(() => {
-    if (role_uuid.value !== 222) {
-        // Lọc các route chính
-        return allRoutes
-            .filter((route) => route.path !== '/admin')
-            .map((route) => {
-                // Lọc các children nếu có
-                if (route.children) {
-                    return {
-                        ...route,
-                        children: route.children.filter(
-                            (child) => child.path !== '/employee/employees' // Loại bỏ child '/employee/employees'
-                        ),
-                    };
-                }
-                return route;
-            });
-    }
-    return allRoutes;
-});
-const allRoutes = [
+// Mảng routes với menu con
+const routes = [
+    // { path: '/home', label: 'Home' },
     {
         path: '/dashboards',
         label: 'dashboards',
@@ -146,11 +118,18 @@ const allRoutes = [
     },
 ];
 
+// Sử dụng Vue Router
 const route = useRoute();
+
+// Theo dõi trạng thái menu con
 const activeSubMenu = ref<number | null>(null);
+
+// Hàm kiểm tra đường dẫn hiện tại
 const isActive = (path: string) => {
     return route.path === path;
 };
+
+// Hàm bật/tắt menu con
 const toggleSubMenu = (index: number) => {
     activeSubMenu.value = activeSubMenu.value === index ? null : index;
 };

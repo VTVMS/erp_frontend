@@ -4,7 +4,7 @@ import axios from "axios";
 export const env = process.env.NODE_ENV;
 export const is_env_dev = env !== 'staging' && env !== 'production';
 // export const BASE_URL = env === 'development' ? 'http://192.168.1.215:3000/v1' : env === 'staging' ? '' : '';
-export const BASE_URL = env === 'development' ? 'https://uptop-api.myxini.vn/v1' : env === 'staging' ? '' : '';
+export const BASE_URL = env === 'development' ? 'https://api-dev.uptoperp.com/' : env === 'staging' ? '' : '';
 
 export const axiosInstance = axios.create({
     baseURL: BASE_URL
