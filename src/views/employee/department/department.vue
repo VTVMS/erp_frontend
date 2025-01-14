@@ -4,6 +4,8 @@ import TableComponent from '../../../components/Table.vue';
 import Dialog from '../../../components/Dialog.vue';
 import CustomInput from '../../../components/Input.vue';
 import Button from '../../../components/Button.vue';
+import { onMounted } from 'vue';
+import { departmantStore } from '../../../stores/departmant.store';
 
 const table = ref({
     cols: [
@@ -36,6 +38,12 @@ const avatar = ref('');
 const codeDepartment = ref('');
 const nameDepartment = ref('');
 const quantityEmployee = ref('');
+
+const deparStore = departmantStore()
+onMounted(async () => {
+  await deparStore.listUsers();  // Call the action to fetch users
+  console.log(deparStore.userList);  // Log the user list after it has been fetched
+});
 
 const openDialog = (type: 'add' | 'edit' | 'delete') => {
     typeDialog.value = type;

@@ -8,7 +8,7 @@ class UserService {
 
     async admin_create_new_user(payload: AdminCreateNewUserRequest): Promise<[null, UserModel] | [Error]> {
         try {
-            const { data } = await this.httpClient.post<UserModel>(`/admin/create_user`, { ...payload }, { headers: axiosHeader() });
+            const { data } = await this.httpClient.post<UserModel>(`/user/create`, { ...payload }, { headers: axiosHeader() });
             return [null, data];
         } catch (error) {
             return [error];
@@ -17,7 +17,7 @@ class UserService {
 
     async admin_get_list_users(): Promise<[null, UserModel[]] | [Error]> {
         try {
-            const { data } = await this.httpClient.get<UserModel[]>(`/admin/list_users?page_num=0&page_size=20`, { headers: axiosHeader() });
+            const { data } = await this.httpClient.get<UserModel[]>(`/user/list?page_num=0&page_size=20`, { headers: axiosHeader() });
             return [null, data];
         } catch (error) {
             return [error];
@@ -26,7 +26,7 @@ class UserService {
 
     async admin_delete_user(user_uuid: string): Promise<[null, MessageResponseModel] | [Error]> {
         try {
-            const { data } = await this.httpClient.delete<MessageResponseModel>(`/admin/delete_user/${user_uuid}`, { headers: axiosHeader() });
+            const { data } = await this.httpClient.delete<MessageResponseModel>(`/user/delete/${user_uuid}`, { headers: axiosHeader() });
             return [null, data];
         } catch (error) {
             return [error];

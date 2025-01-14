@@ -3,103 +3,9 @@
         <div class="col-span-3">
             <ExpandablePanel :dataList="items" @add="handleAdd" @edit="handleEdit" @delete="handleDelete" />
         </div>
-        <div class="col-span-9">
-            <TableComponent :table="table" titleList="listEmployee">
-                <template #customContent>
-                    <Button type="add" @click="openDialog('add')" />
-
-                    <div class="relative mt-1">
-                        <input type="text" id="searchInput" placeholder="Tìm kiếm ..." class="border border-gray-300 rounded-lg pl-10 w-full py-1" />
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="absolute inset-y-0 left-0 w-5 h-5 text-gray-400 ml-2 my-auto">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-                    </div>
-                </template>
-                <template #actions="{ row }">
-                    <Button type="actionEdit" @click="openDialog('edit')" />
-                    <Button type="actionDelete" @click="openDialog('delete')" />
-                </template>
-            </TableComponent>
-        </div>
+       
     </div>
 
-    <Dialog :isOpen="isDialogOpen" @update:isOpen="isDialogOpen = $event" :width="'450px'">
-        <template #header>
-            <div v-if="typeDialog === 'add'">
-                {{ $t('addAccount') }}
-            </div>
-            <div v-if="typeDialog === 'edit'">
-                {{ $t('editAccount') }}
-            </div>
-            <div v-if="typeDialog === 'delete'">
-                {{ $t('deleteAccount') }}
-            </div>
-        </template>
-        <template #content>
-            <div v-if="typeDialog === 'add'">
-                <CustomInput v-model="name" type="text" label="name" placeholder="name" />
-                <CustomInput v-model="email" type="text" label="email" placeholder="email" />
-                <SelectInput v-model="authorities" :data="positions" label="authorities" id="authorities" />
-            </div>
-            <div v-if="typeDialog === 'edit'">
-                <div class="">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('name') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập họ và tên ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('email') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập thông tin email ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="position" class="block text-base font-medium leading-6">{{ $t('authorities') }}</label>
-                    <select
-                        id="position"
-                        v-model="selectPosition"
-                        name="user"
-                        autocomplete="country-name"
-                        class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                    >
-                        <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                            {{ position.position_name }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <div v-if="typeDialog === 'delete'">
-                <p>{{ $t('titleDelete') }}</p>
-            </div>
-        </template>
-
-        <template #footer>
-            <div v-if="typeDialog === 'add'">
-                <Button type="save" @click="handleAddItem" />
-            </div>
-            <div v-if="typeDialog === 'edit'">
-                <Button type="save" @click="handleEditItem" />
-            </div>
-            <div v-if="typeDialog === 'delete'">
-                <Button type="delete" @click="handleDeleteItem" />
-            </div>
-        </template>
-    </Dialog>
 </template>
 
 <script lang="ts" setup>
@@ -109,7 +15,15 @@ import Dialog from '../../../components/Dialog.vue';
 import ExpandablePanel from '../../../components/ExpandablePanel.vue';
 import Button from '../../../components/Button.vue';
 import CustomInput from '../../../components/Input.vue';
+import { onMounted } from 'vue';
 import SelectInput from '../../../components/Select.vue';
+import { positionStore } from '../../../stores/position.store';
+const posiStore = positionStore();
+
+onMounted(async () => {
+  await posiStore.listPosition();  // Call the action to fetch users
+  console.log(posiStore.listPosition);  // Log the user list after it has been fetched
+});
 const table = ref({
     cols: [
         { title: 'name', field: 'name', show: true, sort: true },
