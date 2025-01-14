@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { userService } from '../services/user.service.ts';
-import { UserModel, AdminCreateNewUserRequest } from '../model/user.model.ts';
+import {UserModel, AdminCreateNewUserRequest, AdminUpdateUserRequest} from '../model/user.model.ts';
 import { useToast } from 'vue-toastification';
 
 export const useUserStore = defineStore('user', {
@@ -38,7 +38,6 @@ export const useUserStore = defineStore('user', {
             const toast = useToast();
             this.isLoading = true;
             this.error = null;
-
             try {
                 const [error, result] = await userService.admin_create_new_user(payload);
                 if (error) {
@@ -46,7 +45,61 @@ export const useUserStore = defineStore('user', {
                     console.error(error);
                     toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
                 } else {
-                    this.userList.unshift(result);
+                    this.userList.unshift(result.data);
+                    this.error = null;
+                    this.isLoading = false;
+                }
+            } finally {
+                this.isLoading = false;
+                this.error = null;
+            }
+        },
+        async updateUser(user_uuid: string, payload: AdminUpdateUserRequest) {
+            const toast = useToast();
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const [error, result] = await userService.admin_update_user(user_uuid, payload);
+                if (error) {
+                    this.error = 'Failed to update user';
+                    console.error(error);
+                    toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
+                } else {
+                    this.userList = this.userList.map((user) => {
+                        if (user.user_uuid === user_uuid) {
+                            return Object.assign({}, result.data);
+                        }
+
+                        return Object.assign({}, user);
+                    });
+                    this.error = null;
+                    this.isLoading = false;
+                }
+            } finally {
+                this.isLoading = false;
+                this.error = null;
+            }
+        },
+        async lockAccountOfUser(user_uuid: string, payload: AdminUpdateUserRequest) {
+            const toast = useToast();
+            this.isLoading = true;
+            this.error = null;
+            try {
+                console.log(payload);
+                const [error, result] = await userService.admin_update_user(user_uuid, payload);
+                if (error) {
+                    this.error = 'Failed to lock user';
+                    console.error(error);
+                    toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
+                } else {
+                    console.log(result.data);
+                    this.userList = this.userList.map((user) => {
+                        if (user.user_uuid === user_uuid) {
+                            return Object.assign({}, result.data);
+                        }
+
+                        return Object.assign({}, user);
+                    });
                     this.error = null;
                     this.isLoading = false;
                 }
@@ -64,7 +117,6 @@ export const useUserStore = defineStore('user', {
                     this.error = 'Failed to delete user';
                     console.error(error);
                 } else {
-                    // this.userList = this.userList.filter((user) => user.user_uuid !== user_uuid);
                     this.userList = this.userList.map((user) => {
                         if (user.user_uuid === user_uuid) {
                             return Object.assign({}, result);

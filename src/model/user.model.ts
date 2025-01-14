@@ -1,3 +1,5 @@
+import {RoleModel} from "./role.model.ts";
+
 export interface AdminCreateNewUserRequest {
     email: string;
     password: string;
@@ -9,7 +11,27 @@ export interface AdminCreateNewUserRequest {
     language?: string;
     status?: number;
     role_uuid: string;
-    is_create_new_employee: boolean;
+}
+
+export interface AdminUpdateUserRequest {
+    full_name?: string;
+    password?: string;
+    picture?: string;
+    gender?: string;
+    phone_number?: string;
+    address?: string;
+    language?: string;
+    status?: number;
+    role_uuid?: string;
+}
+
+export interface UpdateUserRequest {
+    full_name?: string;
+    picture?: string;
+    gender?: string;
+    phone_number?: string;
+    address?: string;
+    language?: string;
 }
 
 export class UserModel {
@@ -21,7 +43,7 @@ export class UserModel {
     address?: string;
     language?: string;
     status!: number;
-    role_id!: number;
+    role?: RoleModel;
     last_login?: string;
     created_at!: string;
     updated_at!: string;
