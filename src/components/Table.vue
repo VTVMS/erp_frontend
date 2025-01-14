@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import * as XLSX from 'xlsx';
-import { format } from 'date-fns';
+import { DateTime } from "luxon";
 
 // Props
 const props = defineProps({
@@ -81,7 +81,7 @@ const visiblePages = computed(() => {
 
 // Chuyển đổi định dạng ngày
 function formatDate(date: string): string {
-    return format(new Date(date), 'dd/MM/yyyy');
+    return DateTime.fromISO(date).toFormat('dd/MM/yyyy');
 }
 
 // Chuyển trang
