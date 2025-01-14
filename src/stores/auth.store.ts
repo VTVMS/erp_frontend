@@ -1,11 +1,12 @@
 import { DateTime } from "luxon";
 import { defineStore } from 'pinia';
-import { ACCESS_TOKEN_LOCAL, EXPIRED_ACCESS_TOKEN_LOCAL, REFRESH_TOKEN_LOCAL } from '../common/const.ts';
-import { LoginByEmailRequest, TokenResponse } from '../model/auth.model.ts';
+import { ACCESS_TOKEN_LOCAL, EXPIRED_ACCESS_TOKEN_LOCAL } from '../common/const.ts';
+import { LoginByEmailRequest } from '../model/auth.model.ts';
 import { authService } from '../services/auth.service.ts';
 import { userService } from '../services/user.service.ts';
 import router from '../router';
 import { useToast } from 'vue-toastification';
+import {clearAuthFromLocalStorage, setAuthToLocalStorage} from "../common/config.ts";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -98,16 +99,3 @@ export const useAuthStore = defineStore('auth', {
         },
     },
 });
-
-const setAuthToLocalStorage = (token: TokenResponse) => {
-    const expiredAt = DateTime.now().set({second: token.expire_in});
-    localStorage.setItem(ACCESS_TOKEN_LOCAL, token.access_token);
-    localStorage.setItem(REFRESH_TOKEN_LOCAL, token.refresh_token);
-    localStorage.setItem(EXPIRED_ACCESS_TOKEN_LOCAL, expiredAt.toISO());
-};
-
-const clearAuthFromLocalStorage = () => {
-    localStorage.removeItem(ACCESS_TOKEN_LOCAL);
-    localStorage.removeItem(REFRESH_TOKEN_LOCAL);
-    localStorage.removeItem(EXPIRED_ACCESS_TOKEN_LOCAL);
-};

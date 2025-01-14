@@ -9,7 +9,6 @@ class AuthService {
     async loginByEmail(payload: LoginByEmailRequest): Promise<[null, TokenResponse] | [Error]> {
         try {
             const { data } = await this.httpClient.post<TokenResponse>(`/login_by_email`, { ...payload });
-            
             return [null, data];
         } catch (error) {
             return [error];
