@@ -7,7 +7,7 @@ class DepartmantService {
 
     async get_list_departmant(): Promise<[null, DepartmentModel[]] | [Error]> {
         try {
-            const { data } = await this.httpClient.get<DepartmentModel[]>(`/department/list?page_num=0&page_size=20`); 
+            const { data } = await this.httpClient.get<DepartmentModel[]>(`/department/list`, { headers: axiosHeader() }); 
             return [null, data];
         } catch (error) {
             return [error];

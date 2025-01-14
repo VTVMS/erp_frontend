@@ -4,7 +4,7 @@ import { positionService } from '../services/position.service';
 
 export const positionStore = defineStore('user', {
     state: () => ({
-        userList: [] as [],
+        positionList: [] as [],
         error: null as string | null,
         isLoading: false,
     }),
@@ -22,8 +22,8 @@ export const positionStore = defineStore('user', {
                     console.error(error);
                     return;
                 }
-                this.userList = result.data.reverse();
-                console.log(this.userList);
+                this.positionList = result.data.reverse();
+                console.log(this.positionList);
                 
                 this.error = null;
                 this.isLoading = false;
