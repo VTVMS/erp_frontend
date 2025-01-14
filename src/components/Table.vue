@@ -162,7 +162,7 @@ function sortData() {
                     <div class="dropdown-content-nav border min-w-40 rounded-md right-0 absolute bg-gray-100 text-gray-800 shadow hidden group-hover:block z-50 p-3">
                         <div v-for="col in props.table.cols" :key="col.field" class="flex items-center">
                             <input type="checkbox" v-model="col.show" class="mr-2" />
-                            <label class="text-base"> {{ $t(col.title) }}</label>
+                            <label class="text-base whitespace-nowrap"> {{ $t(col.title) }}</label>
                         </div>
                     </div>
                 </div>
