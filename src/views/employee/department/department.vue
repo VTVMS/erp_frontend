@@ -6,7 +6,7 @@
         </template>
         <template #actions="{ row }">
             <Button type="actionEdit" @click="openDialog('edit')" />
-            <Button type="actionDelete" @click="openDialog('delete', row.user_uuid)" />
+            <Button type="actionDelete" @click="openDialog('delete', row.department_uuid)" />
         </template>
     </TableComponent>
 
@@ -24,16 +24,12 @@
         </template>
         <template #content>
             <div v-if="typeDialog === 'add'">
-                <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
-                <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
-                <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
-                <SelectInput v-model="positions" :data="positions" label="authorities" id="positions" />
+                <CustomInput label="name" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
+                <CustomInput label="department_code" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" />
             </div>
             <div v-if="typeDialog === 'edit'">
-                <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
-                <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
-                <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
-                <SelectInput v-model="positions" :data="positions" label="authorities" id="positions" />
+                <CustomInput label="name" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
+                <CustomInput label="department_code" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" />
             </div>
             <div v-if="typeDialog === 'delete'">
                 {{ $t('titleDelete') }}
@@ -61,7 +57,6 @@ import TableComponent from '../../../components/Table.vue';
 import Dialog from '../../../components/Dialog.vue';
 import CustomInput from '../../../components/Input.vue';
 import Search from '../../../components/Search.vue';
-import SelectInput from '../../../components/Select.vue';
 import Button from '../../../components/Button.vue';
 import { departmantStore } from '../../../stores/departmant.store';
 
@@ -72,13 +67,13 @@ const selectedRow = ref<Record<string, any> | null>(null);
 const searchQuery = ref('');
 const debounceTimeout = ref<NodeJS.Timeout | null>(null);
 
-const codeDepartment = ref('');
+const department_code = ref('');
 const name = ref('');
-const quantity = ref('');
+const organization_uuid= ref('')
 
-const deparStore = departmantStore()
+const deparStore = departmantStore();
 onMounted(async () => {
-  await deparStore.listUsers();
+    await deparStore.listDepartment();
 });
 
 const table = ref({
@@ -115,49 +110,43 @@ const onSearchInput = (event: Event) => {
     const input = event.target as HTMLInputElement;
     updateSearchQuery(input.value);
 };
-const openDialog = (type: 'add' | 'edit' | 'delete', userOrRow?: Record<string, any>) => {
+const openDialog = (type: 'add' | 'edit' | 'delete', department_uuid?: string) => {
     typeDialog.value = type;
     isDialogOpen.value = true;
 
-    if (userOrRow) {
-        selectedRow.value = userOrRow;
-        full_name.value = userOrRow.full_name || '';
-        email.value = userOrRow.email || '';
-        password.value = userOrRow.password || '';
-        positions.value = userOrRow.role_uuid || '';
-        user_uuid.value = userOrRow.user_uuid || '';
+    if (department_uuid) {
+        const departmentOrRow = deparStore.departmentList.find((department) => department.department_uuid === uuid);
+        selectedRow.value = departmentOrRow;
+        department_code.value = departmentOrRow.department_code || '';
+        name.value = departmentOrRow.name || '';
     } else {
         selectedRow.value = null;
-        full_name.value = '';
-        email.value = '';
-        password.value = '';
-        positions.value = 'f0c80740-2218-4757-b6af-4385a4dd90ca';
+        department_code.value = '';
+        organization_uuid.value='78b25f94-7acc-4fc7-8c0e-4d5aa908ddde';
+        name.value = '';
     }
 };
 
 const handleAddItem = async () => {
-    await userStore.createUser({
-        email: email.value,
-        password: password.value,
-        full_name: full_name.value,
-        role_uuid: positions.value,
-        is_create_new_employee: false,
+    await deparStore.createDepartment({
+        department_code: department_code.value,
+        name: name.value,
+        organization_uuid:'78b25f94-7acc-4fc7-8c0e-4d5aa908ddde'
     });
     isDialogOpen.value = false;
 };
 
-const handleEditItem = () => {
-    if (selectedRow.value) {
-        console.log('Deleting:', selectedRow.value);
-        userStore.updateUser(selectedRow.value);
-    }
-    isDialogOpen.value = false;
-};
+// const handleEditItem = () => {
+//     if (selectedRow.value) {
+//         console.log('Deleting:', selectedRow.value);
+//         deparStore.updateUser(selectedRow.value);
+//     }
+//     isDialogOpen.value = false;
+// };
 
 const handleDeleteItem = () => {
     if (selectedRow.value) {
         console.log('Deleting:', selectedRow.value);
-        userStore.deleteUser(selectedRow.value);
     }
     isDialogOpen.value = false;
 };
