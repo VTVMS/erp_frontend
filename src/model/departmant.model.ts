@@ -1,8 +1,9 @@
 export interface CreateNewDepartmantRequest {
+    department_code: string;
     description: string;
     image_url: string;
     name: string;
-    // organization_uuid: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    organization_uuid: string;
 }
 
 export class DepartmentModel {
@@ -15,4 +16,3 @@ export class DepartmentModel {
     quantity!: number;
     updated_at!: string;
 }
-

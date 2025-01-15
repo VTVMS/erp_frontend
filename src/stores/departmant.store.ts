@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia';
 import { useToast } from 'vue-toastification';
 import { departmantService } from '../services/department.service.ts';
+import { CreateNewDepartmantRequest } from '../model/departmant.model.ts';
 
-export const departmantStore = defineStore('user', {
+export const departmantStore = defineStore('department', {
     state: () => ({
-        userList: [] as [],
+        departmentList: [] as [],
         error: null as string | null,
         isLoading: false,
     }),
     actions: {
         // list of users
-        async listUsers() {
+        async listDepartment() {
             this.isLoading = true;
             this.error = null;
 
@@ -22,7 +23,9 @@ export const departmantStore = defineStore('user', {
                     console.error(error);
                     return;
                 }
-                this.userList = result.data.reverse();
+                this.departmentList = result.data.reverse();
+                console.log( this.departmentList);
+                
                 this.error = null;
                 this.isLoading = false;
             } catch (err) {
@@ -33,5 +36,25 @@ export const departmantStore = defineStore('user', {
                 this.error = null;
             }
         },
+        async createDepartment(payload: CreateNewDepartmantRequest) {
+                    const toast = useToast();
+                    this.isLoading = true;
+                    this.error = null;
+                    try {
+                        const [error, result] = await departmantService.create_new_department(payload);
+                        if (error) {
+                            this.error = 'Failed to create user';
+                            console.error(error);
+                            toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
+                        } else {
+                            this.departmentList.unshift(result.data);
+                            this.error = null;
+                            this.isLoading = false;
+                        }
+                    } finally {
+                        this.isLoading = false;
+                        this.error = null;
+                    }
+                },
     },
 });

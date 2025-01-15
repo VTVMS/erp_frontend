@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useToast } from 'vue-toastification';
 import { positionService } from '../services/position.service';
 
-export const positionStore = defineStore('user', {
+export const positionStore = defineStore('position', {
     state: () => ({
         positionList: [] as [],
         error: null as string | null,
