@@ -115,8 +115,8 @@ import { positionStore } from '../../../stores/position.store';
 const posiStore = positionStore();
 
 onMounted(async () => {
-  await posiStore.listPosition();  // Call the action to fetch users
-  console.log(posiStore.positionList);  // Log the user list after it has been fetched
+  await posiStore.listPosition();
+  console.log(posiStore.positionList);
 });
 const table = ref({
     cols: [
@@ -175,10 +175,10 @@ interface DataItem {
     name: string;
 }
 const items = computed(() => {
-    return posiStore.positionList.map((user: any) => ({
-        id: user.id,
-        code: user.code || 'PB',
-        name: user.name,
+    return posiStore.positionList.map((position: any) => ({
+        id: position.id,
+        code: position.code || 'PB',
+        name: position.name,
     }));
 });
 

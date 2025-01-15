@@ -88,16 +88,16 @@ const table = ref({
         { title: 'quantityEmployee', field: 'quantity', show: true, sort: true },
     ],
     data: computed(() => {
-        const userList = deparStore.userList.length ? deparStore.userList : [];
-        return userList
-            .filter((user) => {
+        const departmentList = deparStore.departmentList.length ? deparStore.departmentList : [];
+        return departmentList
+            .filter((department) => {
                 const searchTerm = searchQuery.value.toLowerCase();
-                return user?.name?.toLowerCase().includes(searchTerm);
+                return department?.name?.toLowerCase().includes(searchTerm);
             })
-            .map((user) => ({
-                department_code: user?.department_code,
-                name: user?.name,
-                quantity: user?.quantity,
+            .map((department) => ({
+                department_code: department?.department_code,
+                name: department?.name,
+                quantity: department?.quantity,
             }));
     }),
 });

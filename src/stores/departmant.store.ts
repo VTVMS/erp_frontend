@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 import { useToast } from 'vue-toastification';
 import { departmantService } from '../services/department.service.ts';
 
-export const departmantStore = defineStore('user', {
+export const departmantStore = defineStore('department', {
     state: () => ({
-        userList: [] as [],
+        departmentList: [] as [],
         error: null as string | null,
         isLoading: false,
     }),
