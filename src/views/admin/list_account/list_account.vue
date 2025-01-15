@@ -6,7 +6,12 @@
         </template>
         <template #actions="{ row }">
             <Button type="actionEdit" @click="openDialog('edit', row.user_uuid)" />
-            <Button type="actionLock" @click="openDialog('lock', row.user_uuid)" />
+            <div v-if="row.status">
+              <Button type="actionLock" @click="openDialog('lock', row.user_uuid)" />
+            </div>
+            <div v-else>
+              <Button type="actionUnLock" @click="openDialog('unlock', row.user_uuid)" />
+            </div>
         </template>
     </TableComponent>
 
@@ -21,10 +26,16 @@
             <div v-if="typeDialog === 'lock'">
                 {{ $t('lockAccount') }}
             </div>
+            <div v-if="typeDialog === 'unlock'">
+              {{ $t('unLockAccount') }}
+            </div>
         </template>
         <template #content>
             <div v-if="typeDialog === 'lock'">
                 {{ $t('titleLockAccount') }}
+            </div>
+            <div v-else-if="typeDialog === 'unlock'">
+                {{ $t('titleUnLockAccount') }}
             </div>
             <div v-else>
               <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
@@ -39,7 +50,7 @@
                     :options="roleStore.roles.map(el => ({ label: roleName[el.name], value: el.role_uuid }))"
                 />
               </div>
-          </div>
+            </div>
         </template>
 
         <template #footer>
@@ -51,6 +62,9 @@
             </div>
             <div v-if="typeDialog === 'lock'">
                 <Button type="lockAcc" @click="handleLockItem" />
+            </div>
+            <div v-if="typeDialog === 'unlock'">
+              <Button type="unlockAcc" @click="handleUnLockItem" />
             </div>
         </template>
     </Dialog>
@@ -66,10 +80,10 @@ import Search from '../../../components/Search.vue';
 import Button from '../../../components/Button.vue';
 import { useUserStore } from '../../../stores/user.store';
 import { useRoleStore } from "../../../stores/role.store.ts";
-import {getKeyByValue, roleName} from "../../../common/reuse.ts";
+import { getKeyByValue, roleName } from "../../../common/reuse.ts";
 
 const isDialogOpen = ref(false);
-const typeDialog = ref<'add' | 'edit' | 'lock'>('add');
+const typeDialog = ref<'add' | 'edit' | 'lock' | 'unlock'>('add');
 const selectedRow = ref<Record<string, any> | null>(null);
 
 const searchQuery = ref('');
@@ -129,12 +143,12 @@ const onSearchInput = (event: Event) => {
     updateSearchQuery(input.value);
 };
 
-const openDialog = (type: 'add' | 'edit' | 'lock', uuid?: string) => {
+const openDialog = (type: 'add' | 'edit' | 'lock' | 'unlock', uuid?: string) => {
     typeDialog.value = type;
     isDialogOpen.value = true;
 
     if (uuid) {
-        if (type === 'lock') {
+        if (type === 'lock' || type === 'unlock') {
             user_uuid.value = uuid;
             return;
         }
@@ -176,8 +190,15 @@ const handleEditItem = async () => {
 
 const handleLockItem = async () => {
     if (user_uuid.value) {
-        await userStore.lockAccountOfUser(user_uuid.value, { status: 0 });
+        await userStore.handleStatusAccountOfUser(user_uuid.value, { status: 0 });
     }
     isDialogOpen.value = false;
+};
+
+const handleUnLockItem = async () => {
+  if (user_uuid.value) {
+    await userStore.handleStatusAccountOfUser(user_uuid.value, { status: 1 });
+  }
+  isDialogOpen.value = false;
 };
 </script>

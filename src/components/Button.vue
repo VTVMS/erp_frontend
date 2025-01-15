@@ -12,7 +12,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
     type: {
-        type: String as () => 'save' | 'edit' | 'delete' | 'cancel' | 'add' | 'actionEdit' | 'actionDelete' | 'logout' | 'profile' | 'changePass'| 'actionLock' | 'lockAcc',
+        type: String as () => 'save' | 'edit' | 'delete' | 'cancel' | 'add' | 'actionEdit' | 'actionDelete' | 'logout' | 'profile' | 'changePass'| 'actionLock' | 'lockAcc' | 'actionUnLock' | 'unlockAcc',
         default: 'save',
     },
 });
@@ -37,6 +37,16 @@ const buttonConfig = {
       class: 'bg-red-600 hover:bg-red-700 px-4 py-2',
       text: 'lock',
       icon: 'M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z',
+    },
+    unlockAcc: {
+      class: 'bg-green-600 hover:bg-green-700 px-4 py-2',
+      text: 'unlock',
+      icon: 'M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z',
+    },
+    actionUnLock: {
+      class: 'bg-green-600 hover:bg-green-700 pl-1.5 pr-1.5 pt-1.5 pb-1.5',
+      text: '',
+      icon: 'M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z',
     },
     cancel: {
         class: ' px-4 py-2  ring-gray-300 hover:bg-gray-50 shadow-sm ring-1 ring-inset text-gray-900',

@@ -28,6 +28,7 @@ const vi = {
     edit: 'Chỉnh sửa',
     delete: 'Xoá',
     lock: 'Khoá',
+    unlock: 'Mở khoá',
     sort: 'Sắp xếp',
     buttonDefaut:'',
 
@@ -47,6 +48,7 @@ const vi = {
     deleteEmployee: 'Xoá nhân viên',
     titleDelete: 'Bạn có chắc chắn muốn xóa mục này?',
     titleLockAccount: 'Bạn có chắc chắn muốn khoá tài khoản này?',
+    titleUnLockAccount: 'Bạn có chắc chắn muốn mở khoá tài khoản này?',
     save: 'Lưu',
     sloganLogin: ' Hiệu quả trong từng công đoạn, hoàn hảo trong từng chương trình. ',
     signIn: 'Đăng nhập',
@@ -61,6 +63,7 @@ const vi = {
     editAccount:'Cập nhật tài khoản',
     deleteAccount:'Xoá tài khoản',
     lockAccount:'Khoá tài khoản',
+    unLockAccount:'Mở khoá tài khoản',
     authorities:'Quyền',
     addPosition:'Thêm tài khoản',
     editPosition:'Cập nhật tài khoản',
