@@ -1,13 +1,11 @@
 <template>
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
-            <ExpandablePanel :dataList="items" @add="handleAdd" @edit="handleEdit" @delete="handleDelete" />
+            <ExpandablePanel :dataList="items" :handleAddFunc="handleOpenAddNewPosition" :handleUpdateFunc="handleOpenEditPosition" :handleDeleteFunc="handleOpenDeletePosition" />
         </div>
         <div class="col-span-9">
             <TableComponent :table="table" titleList="listEmployee">
                 <template #customContent>
-                    <Button type="add" @click="openDialog('add')" />
-
                     <div class="relative mt-1">
                         <input type="text" id="searchInput" placeholder="Tìm kiếm ..." class="border border-gray-300 rounded-lg pl-10 w-full py-1" />
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="absolute inset-y-0 left-0 w-5 h-5 text-gray-400 ml-2 my-auto">
@@ -15,88 +13,55 @@
                         </svg>
                     </div>
                 </template>
-                <template #actions="{ row }">
-                    <Button type="actionEdit" @click="openDialog('edit')" />
-                    <Button type="actionDelete" @click="openDialog('delete')" />
-                </template>
             </TableComponent>
         </div>
     </div>
 
-    <Dialog :isOpen="isDialogOpen" @update:isOpen="isDialogOpen = $event" :width="'450px'">
+    <Dialog :isOpen="isDialogPositionOpen" @update:isOpen="isDialogPositionOpen = $event" :width="'500px'">
         <template #header>
-            <div v-if="typeDialog === 'add'">
-                {{ $t('addAccount') }}
-            </div>
-            <div v-if="typeDialog === 'edit'">
-                {{ $t('editAccount') }}
-            </div>
-            <div v-if="typeDialog === 'delete'">
-                {{ $t('deleteAccount') }}
-            </div>
+          <div v-if="typeDialog === 'add'">
+            {{ $t('addAccount') }}
+          </div>
+          <div v-if="typeDialog === 'edit'">
+            {{ $t('editAccount') }}
+          </div>
+          <div v-if="typeDialog === 'delete'">
+            {{ $t('deleteAccount') }}
+          </div>
         </template>
         <template #content>
+          <div v-if="typeDialog === 'delete'">
+            {{ $t('titleDelete') }}
+          </div>
+          <div v-else>
             <div v-if="typeDialog === 'add'">
-                <CustomInput v-model="name" type="text" label="name" placeholder="name" />
-                <CustomInput v-model="email" type="text" label="email" placeholder="email" />
-                <SelectInput v-model="authorities" :data="positions" label="authorities" id="authorities" />
+              <CustomInput label="position_code" placeholder="enterYourPositionCode" id="position_code" required v-model="position_code" type="text" />
             </div>
-            <div v-if="typeDialog === 'edit'">
-                <div class="">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('name') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập họ và tên ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="email" class="block text-base font-medium leading-6"> {{ $t('email') }} </label>
-                    <div class="mt-2.5">
-                        <input
-                            bind:value=""
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="block w-full rounded-md border-0 py-1.5 px-4 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6"
-                            placeholder="Nhập thông tin email ..."
-                        />
-                    </div>
-                </div>
-                <div class="mt-2.5">
-                    <label for="position" class="block text-base font-medium leading-6">{{ $t('authorities') }}</label>
-                    <select
-                        id="position"
-                        v-model="selectPosition"
-                        name="user"
-                        autocomplete="country-name"
-                        class="mt-2.5 block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-[var(-color-30)] sm:text-sm sm:leading-6 dark:bg-gray-850 dark:ring-gray-600"
-                    >
-                        <option v-for="position in positions" :key="position.id" :value="JSON.stringify(position)">
-                            {{ position.position_name }}
-                        </option>
-                    </select>
-                </div>
+            <CustomInput label="position_name" placeholder="enterYourPositionName" id="position_name" required v-model="position_name" type="text" />
+            <CustomInput label="position_description" placeholder="enterYourPositionDescription" id="position_description" v-model="position_description" type="text" />
+            <div v-if="typeDialog === 'add'">
+              <div class="mt-2.5">
+                <label for="department" class="block font-medium leading-6">
+                  {{ $t('department') }}
+                </label>
+                <v-select
+                    v-model="departmentSelected"
+                    :options="departmentStore.departmentList.map(el => ({ label: el.name, value: el.department_uuid }))"
+                />
+              </div>
             </div>
-            <div v-if="typeDialog === 'delete'">
-                <p>{{ $t('titleDelete') }}</p>
-            </div>
+          </div>
         </template>
 
         <template #footer>
             <div v-if="typeDialog === 'add'">
-                <Button type="save" @click="handleAddItem" />
+              <Button type="save" @click="handleAddItem" />
             </div>
             <div v-if="typeDialog === 'edit'">
-                <Button type="save" @click="handleEditItem" />
+              <Button type="save" @click="handleEditItem" />
             </div>
             <div v-if="typeDialog === 'delete'">
-                <Button type="delete" @click="handleDeleteItem" />
+              <Button type="delete" @click="handleDeleteItem" />
             </div>
         </template>
     </Dialog>
@@ -107,17 +72,22 @@ import { ref,computed} from 'vue';
 import TableComponent from '../../../components/Table.vue';
 import Dialog from '../../../components/Dialog.vue';
 import ExpandablePanel from '../../../components/ExpandablePanel.vue';
-import Button from '../../../components/Button.vue';
 import CustomInput from '../../../components/Input.vue';
+import Button from '../../../components/Button.vue';
 import { onMounted } from 'vue';
-import SelectInput from '../../../components/Select.vue';
-import { positionStore } from '../../../stores/position.store';
-const posiStore = positionStore();
+import { usePositionStore } from '../../../stores/position.store';
+import { PositionModel } from "../../../model/position.model.ts";
+import { useDepartmentStore } from "../../../stores/departmant.store.ts";
+import { DepartmentModel } from "../../../model/departmant.model.ts";
+
+const positionStore = usePositionStore();
+const departmentStore = useDepartmentStore();
 
 onMounted(async () => {
-  await posiStore.listPosition();
-  console.log(posiStore.positionList);
+  await positionStore.listPositions();
+  await departmentStore.listDepartments();
 });
+
 const table = ref({
     cols: [
         { title: 'name', field: 'name', show: true, sort: true },
@@ -134,64 +104,75 @@ const table = ref({
         },
     ],
 });
-
-const name = ref('');
-const email = ref('');
-const authorities = ref('');
-const isDialogOpen = ref(false);
+const position_code = ref('');
+const position_name = ref('');
+const position_description = ref('');
+const departmentSelected = ref<DepartmentModel | null>(null);
+const isDialogPositionOpen = ref(false);
 const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
-const newItem = ref('');
-const editedItem = ref('');
+const selectedRow = ref<PositionRowItem | null>(null);
 
-const openDialog = (type: 'add' | 'edit' | 'delete') => {
-    typeDialog.value = type;
-    isDialogOpen.value = true;
+const handleAddItem = async () => {
+  if (departmentSelected.value) {
+    await positionStore.createPosition({
+      department_uuid: departmentSelected.value.value,
+      name: position_name.value,
+      position_code: position_code.value,
+      description: position_description.value,
+    });
+  }
+  isDialogPositionOpen.value = false;
 };
 
-const handleAddItem = () => {
-    console.log('Adding item:', newItem.value);
+const handleEditItem = async () => {
+  if (selectedRow.value) {
+    await positionStore.updatePosition(selectedRow.value?.id, {
+      name: position_name.value,
+      description: position_description.value,
+    });
+  }
+  isDialogPositionOpen.value = false;
 };
 
-const handleEditItem = () => {
-    console.log('Editing item:', editedItem.value);
+const handleDeleteItem = async () => {
+  if (selectedRow.value) {
+    await positionStore.deletePosition(selectedRow.value?.id);
+  }
+  isDialogPositionOpen.value = false;
 };
 
-const handleDeleteItem = () => {
-    console.log('Deleting item');
-    // Logic for deleting item
-};
-
-const positions = [
-    { id: 1, name: 'select 1' },
-    { id: 2, name: 'select 2' },
-    { id: 3, name: 'select 3' },
-];
-
-const selectPosition = ref('');
-
-interface DataItem {
-    id: number;
+interface PositionRowItem {
+    id: string;
     code: string;
     name: string;
+    description: string;
 }
+
 const items = computed(() => {
-    return posiStore.positionList.map((position: any) => ({
-        id: position.id,
-        code: position.code || 'PB',
+    return positionStore.positionList.map((position: PositionModel) => ({
+        id: position.position_uuid,
+        code: position.position_code || 'PB',
         name: position.name,
+        description: position.description,
     }));
 });
 
-
-function handleAdd() {
-    console.log('Add clicked');
+function handleOpenAddNewPosition() {
+    typeDialog.value = 'add';
+    isDialogPositionOpen.value = true;
 }
 
-function handleEdit(row: DataItem) {
-    console.log('Edit clicked', row);
+function handleOpenEditPosition(row: PositionRowItem) {
+    selectedRow.value = row;
+    position_name.value = row.name;
+    position_description.value = row.description;
+    typeDialog.value = 'edit';
+    isDialogPositionOpen.value = true;
 }
 
-function handleDelete(row: DataItem) {
-    console.log('Delete clicked', row);
+function handleOpenDeletePosition(row: PositionRowItem) {
+    selectedRow.value = row;
+    typeDialog.value = 'delete';
+    isDialogPositionOpen.value = true;
 }
 </script>

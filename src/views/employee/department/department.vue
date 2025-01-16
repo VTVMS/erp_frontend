@@ -58,7 +58,7 @@ import Dialog from '../../../components/Dialog.vue';
 import CustomInput from '../../../components/Input.vue';
 import Search from '../../../components/Search.vue';
 import Button from '../../../components/Button.vue';
-import { departmantStore } from '../../../stores/departmant.store';
+import { useDepartmentStore } from '../../../stores/departmant.store';
 
 const isDialogOpen = ref(false);
 const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
@@ -71,9 +71,10 @@ const department_code = ref('');
 const name = ref('');
 const organization_uuid= ref('')
 
-const deparStore = departmantStore();
+const deparStore = useDepartmentStore();
+
 onMounted(async () => {
-    await deparStore.listDepartment();
+    await deparStore.listDepartments();
 });
 
 const table = ref({

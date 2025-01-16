@@ -112,7 +112,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, _, next) => {
-    useAuthStore().$reset;
     const authStore = useAuthStore();
     await authStore.checkIsTokenIsValid();
     const isRequiresAuth = to.matched.some((record) => record.meta.requiresAuth);

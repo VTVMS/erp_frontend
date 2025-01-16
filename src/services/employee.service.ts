@@ -7,7 +7,7 @@ class EmployeeService {
 
     async create_new_employee(): Promise<[null, EmployeeModel] | [Error]> {
         try {
-            const { data } = await this.httpClient.post<EmployeeModel>(`/employee/new`);
+            const { data } = await this.httpClient.post<EmployeeModel>(`/employee/create`);
             return [null, data];
         } catch (error) {
             return [error];

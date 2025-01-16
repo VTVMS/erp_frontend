@@ -10,7 +10,6 @@ export const useUserStore = defineStore('user', {
         isLoading: false,
     }),
     actions: {
-        // list of users
         async listUsers() {
             this.isLoading = true;
             this.error = null;
