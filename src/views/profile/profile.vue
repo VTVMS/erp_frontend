@@ -28,7 +28,7 @@
                     </label>
                     <input
                         id="id"
-                        v-model="fullName"
+                        v-model="full_name"
                         @input="checkIfDirty"
                         :placeholder="$t('enterName')"
                         type="type"
@@ -164,7 +164,7 @@
 import { onMounted, ref } from 'vue';
 import { useProfileStore } from '../../stores/profile.store';
 
-const fullName = ref('');
+const full_name = ref('');
 const codeEmployee = ref('');
 const gender = ref('');
 const birthday = ref('');
@@ -189,23 +189,24 @@ const originalUser = ref({
 });
 
 const profileStore = useProfileStore();
-
+const user = ref(null);
 onMounted(async () => {
     await profileStore.profileUsers();
-    const user = profileStore.profile;
-    console.log(user)
-    if (user) {
+    const fetchedUser = profileStore.profile;
+    console.log(fetchedUser);
+    if (fetchedUser) {
+        user.value = fetchedUser;
         originalUser.value = {
-            full_name: user.full_name || '',
-            email: user.email || '',
-            gender: user.gender || '',
-            birthday: user.birthday || '',
-            phone_number: user.phone_number || '',
-            department: user.department || '',
-            position: user.position || '',
-            address: user.address || '',
+            full_name: fetchedUser.data.full_name || '',
+            email: fetchedUser.data.email || '',
+            gender: fetchedUser.data.gender || '',
+            birthday: fetchedUser.data.birthday || '',
+            phone_number: fetchedUser.data.phone_number || '',
+            department: fetchedUser.data.department || '',
+            position: fetchedUser.data.position || '',
+            address: fetchedUser.data.address || '',
         };
-        fullName.value = originalUser.value.full_name;
+        full_name.value = originalUser.value.full_name;
         codeEmployee.value = originalUser.value.email;
         gender.value = originalUser.value.gender;
         birthday.value = originalUser.value.birthday;
@@ -219,7 +220,7 @@ onMounted(async () => {
 
 const checkIfDirty = () => {
     isDirty.value =
-        fullName.value !== originalUser.value.full_name ||
+    full_name.value !== originalUser.value.full_name ||
         codeEmployee.value !== originalUser.value.email ||
         gender.value !== originalUser.value.gender ||
         birthday.value !== originalUser.value.birthday ||
@@ -232,7 +233,7 @@ const checkIfDirty = () => {
 
 const saveProfile = async () => {
     const updatedData = {
-        full_name: fullName.value,
+        full_name: full_name.value,
         codeEmployee: codeEmployee.value,
         gender: gender.value,
         birthday: birthday.value,

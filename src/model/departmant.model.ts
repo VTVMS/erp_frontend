@@ -1,4 +1,4 @@
-export interface CreateNewDepartmantRequest {
+export interface CreateNewDepartmentRequest {
     department_code: string;
     description: string;
     image_url: string;

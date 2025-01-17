@@ -3,7 +3,7 @@ import { DepartmentModel, CreateNewDepartmantRequest } from '../model/departmant
 import { axiosInstance } from '../common/config.ts';
 import { MessageResponseModel } from '../model/msg_res.model.ts';
 
-class DepartmantService {
+class DepartmentService {
     constructor(private httpClient: AxiosInstance) {}
 
     async get_list_departmant(): Promise<[null, DepartmentModel[]] | [Error]> {
@@ -25,18 +25,10 @@ class DepartmantService {
             return [error];
         }
     }
-    async admin_update_user(user_uuid: string, payload: CreateNewDepartmantRequest): Promise<[null, UserModel] | [Error]> {
-        try {
-            const { data } = await this.httpClient.put<UserModel>(`/user/update/${user_uuid}`, { ...payload });
-            return [null, data];
-        } catch (error) {
-            return [error];
-        }
-    }
 
-    async admin_delete_user(user_uuid: string): Promise<[null, MessageResponseModel] | [Error]> {
+    async delete_department(uuid: string): Promise<[null, MessageResponseModel] | [Error]> {
         try {
-            const { data } = await this.httpClient.delete<MessageResponseModel>(`/department/delete/${user_uuid}`);
+            const { data } = await this.httpClient.delete<MessageResponseModel>(`/department/delete/${uuid}`);
             return [null, data];
         } catch (error) {
             return [error];
@@ -44,4 +36,4 @@ class DepartmantService {
     }
 }
 
-export const departmantService = new DepartmantService(axiosInstance);
+export const departmentService = new DepartmentService(axiosInstance);

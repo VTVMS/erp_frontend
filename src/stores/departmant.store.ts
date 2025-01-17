@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useToast } from 'vue-toastification';
-import { departmantService } from '../services/department.service.ts';
-import { CreateNewDepartmantRequest } from '../model/departmant.model.ts';
+import { departmentService } from '../services/department.service.ts';
+import { CreateNewDepartmentRequest } from '../model/departmant.model.ts';
 
 export const departmantStore = defineStore('department', {
     state: () => ({
@@ -16,7 +16,7 @@ export const departmantStore = defineStore('department', {
             this.error = null;
 
             try {
-                const [error, result] = await departmantService.get_list_departmant();
+                const [error, result] = await departmentService.get_list_departmant();
                 if (error) {
                     this.error = 'Failed to user list';
                     this.isLoading = false;
@@ -24,8 +24,6 @@ export const departmantStore = defineStore('department', {
                     return;
                 }
                 this.departmentList = result.data.reverse();
-                console.log( this.departmentList);
-                
                 this.error = null;
                 this.isLoading = false;
             } catch (err) {
@@ -36,25 +34,50 @@ export const departmantStore = defineStore('department', {
                 this.error = null;
             }
         },
-        async createDepartment(payload: CreateNewDepartmantRequest) {
-                    const toast = useToast();
-                    this.isLoading = true;
+        async createDepartment(payload: CreateNewDepartmentRequest) {
+            const toast = useToast();
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const [error, result] = await departmentService.create_new_department(payload);
+                if (error) {
+                    this.error = 'Failed to create user';
+                    console.error(error);
+                    toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
+                } else {
+                    this.departmentList.unshift(result.data);
                     this.error = null;
-                    try {
-                        const [error, result] = await departmantService.create_new_department(payload);
-                        if (error) {
-                            this.error = 'Failed to create user';
-                            console.error(error);
-                            toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
-                        } else {
-                            this.departmentList.unshift(result.data);
-                            this.error = null;
-                            this.isLoading = false;
-                        }
-                    } finally {
-                        this.isLoading = false;
-                        this.error = null;
-                    }
-                },
+                    this.isLoading = false;
+                }
+            } finally {
+                this.isLoading = false;
+                this.error = null;
+            }
+        },
+        async deleteDepartment(uuid: string) {
+            const toast = useToast();
+            this.isLoading = true;
+            this.error = null;
+
+            try {
+                const [error] = await departmentService.delete_department(uuid);
+                if (error) {
+                    this.error = 'Không thể xóa phòng ban.';
+                    console.error(error);
+                    toast.error('Không thể xóa phòng ban. Vui lòng thử lại!');
+                    return;
+                }
+                this.departmentList = this.departmentList.filter(
+                    (department) => department.uuid !== uuid
+                );
+                toast.success('Xóa phòng ban thành công!');
+            } catch (err) {
+                this.error = 'Đã xảy ra lỗi khi xóa phòng ban.';
+                console.error(err);
+                toast.error(this.error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
     },
 });

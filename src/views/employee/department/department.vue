@@ -5,7 +5,7 @@
             <Search placeholder="placeSearch" @input="onSearchInput" />
         </template>
         <template #actions="{ row }">
-            <Button type="actionEdit" @click="openDialog('edit')" />
+            <Button type="actionEdit" @click="openDialog('edit', row.department_uuid)" />
             <Button type="actionDelete" @click="openDialog('delete', row.department_uuid)" />
         </template>
     </TableComponent>
@@ -69,7 +69,7 @@ const debounceTimeout = ref<NodeJS.Timeout | null>(null);
 
 const department_code = ref('');
 const name = ref('');
-const organization_uuid= ref('')
+const organization_uuid = ref('');
 
 const deparStore = departmantStore();
 onMounted(async () => {
@@ -93,6 +93,7 @@ const table = ref({
                 department_code: department?.department_code,
                 name: department?.name,
                 quantity: department?.quantity,
+                department_uuid: department?.department_uuid,
             }));
     }),
 });
@@ -110,19 +111,17 @@ const onSearchInput = (event: Event) => {
     const input = event.target as HTMLInputElement;
     updateSearchQuery(input.value);
 };
+
 const openDialog = (type: 'add' | 'edit' | 'delete', department_uuid?: string) => {
     typeDialog.value = type;
     isDialogOpen.value = true;
 
-    if (department_uuid) {
-        const departmentOrRow = deparStore.departmentList.find((department) => department.department_uuid === uuid);
-        selectedRow.value = departmentOrRow;
-        department_code.value = departmentOrRow.department_code || '';
-        name.value = departmentOrRow.name || '';
+    if (type === 'edit' || (type === 'delete' && department_uuid)) {
+        selectedRow.value = deparStore.departmentList.find((department) => department.department_uuid === department_uuid) || null;
     } else {
         selectedRow.value = null;
         department_code.value = '';
-        organization_uuid.value='78b25f94-7acc-4fc7-8c0e-4d5aa908ddde';
+        organization_uuid.value = '78b25f94-7acc-4fc7-8c0e-4d5aa908ddde';
         name.value = '';
     }
 };
@@ -131,23 +130,17 @@ const handleAddItem = async () => {
     await deparStore.createDepartment({
         department_code: department_code.value,
         name: name.value,
-        organization_uuid:'78b25f94-7acc-4fc7-8c0e-4d5aa908ddde'
+        organization_uuid: '78b25f94-7acc-4fc7-8c0e-4d5aa908ddde',
     });
     isDialogOpen.value = false;
 };
 
-// const handleEditItem = () => {
-//     if (selectedRow.value) {
-//         console.log('Deleting:', selectedRow.value);
-//         deparStore.updateUser(selectedRow.value);
-//     }
-//     isDialogOpen.value = false;
-// };
-
-const handleDeleteItem = () => {
-    if (selectedRow.value) {
-        console.log('Deleting:', selectedRow.value);
+const handleDeleteItem = async () => {
+    if (!selectedRow.value || !selectedRow.value.department_uuid) {
+        return;
     }
+    await deparStore.deleteDepartment(selectedRow.value.department_uuid);
     isDialogOpen.value = false;
+    selectedRow.value = null;
 };
 </script>
