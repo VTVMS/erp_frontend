@@ -1,117 +1,3 @@
-<script lang="ts" setup>
-import { ref } from 'vue';
-import TableComponent from '../../../components/Table.vue';
-import Dialog from '../../../components/Dialog.vue';
-import CustomInput from '../../../components/Input.vue';
-import SelectInput from '../../../components/Select.vue';
-import Button from '../../../components/Button.vue';
-
-const table = ref({
-    cols: [
-        { title: 'avatar', field: 'avatar', type: 'img', show: true, sort: true },
-        { title: 'codeEmployee', field: 'codeEmployee', show: true, sort: true },
-        { title: 'name', field: 'name', show: true, sort: true },
-        { title: 'department', field: 'department', show: true, sort: true },
-        { title: 'position', field: 'position', show: true, sort: true },
-        { title: 'phone', field: 'phone', show: true, sort: true },
-        { title: 'email', field: 'email', show: true, sort: true },
-    ],
-    data: [
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeEmployee: 'dStock',
-            name: 'John Doe',
-            department: 'IT',
-            position: 'Manager',
-            phone: '12345',
-            email: 'johndoe@example.com',
-        },
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeEmployee: 'aStock',
-            name: 'Jane Doe',
-            department: 'HR',
-            position: 'Assistant',
-            phone: '67890',
-            email: 'janedoe@example.com',
-        },
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeEmployee: 'cStock',
-            name: 'Alice Smith',
-            department: 'Sales',
-            position: 'Lead',
-            phone: '11223',
-            email: 'alicesmith@example.com',
-        },
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeEmployee: 'dStock',
-            name: 'Bob Johnson',
-            department: 'Marketing',
-            position: 'Coordinator',
-            phone: '44556',
-            email: 'bobjohnson@example.com',
-        },
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeEmployee: 'vStock updated',
-            name: 'bJohn Doe',
-            department: '2024-01-01',
-            position: 'Stock updated',
-            phone: 'John Doe',
-            email: '2024-01-01',
-        },
-    ],
-});
-const isDialogOpen = ref(false);
-const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
-const newItem = ref('');
-const editedItem = ref('');
-
-const avatar = ref('');
-const password = ref('');
-const name = ref('');
-const sex = ref('');
-const birthday = ref('');
-const position = ref('');
-const phone = ref('');
-const email = ref('');
-const employeeApprove = ref('');
-
-const openDialog = (type: 'add' | 'edit' | 'delete') => {
-    typeDialog.value = type;
-    isDialogOpen.value = true;
-};
-
-const handleAddItem = () => {
-    console.log('Adding item:', newItem.value);
-};
-
-const handleEditItem = () => {
-    console.log('Editing item:', editedItem.value);
-};
-
-const handleDeleteItem = () => {
-    console.log('Deleting item');
-    // Logic for deleting item
-};
-
-// function sortData(field: string) {
-//     table.value.data.sort((a: any, b: any) => {
-//         const valueA = a[field]?.toString().toLowerCase() || '';
-//         const valueB = b[field]?.toString().toLowerCase() || '';
-//         return valueA.localeCompare(valueB);
-//     });
-// }
-
-const positions = [
-    { id: 1, name: 'select 1' },
-    { id: 2, name: 'select 2' },
-    { id: 3, name: 'select 3' },
-];
-</script>
-
 <template>
     <TableComponent :table="table" titleList="listEmployee">
         <template #customContent>
@@ -238,3 +124,117 @@ const positions = [
         </template>
     </Dialog>
 </template>
+
+<script lang="ts" setup>
+import { ref } from 'vue';
+import TableComponent from '../../../components/Table.vue';
+import Dialog from '../../../components/Dialog.vue';
+import CustomInput from '../../../components/Input.vue';
+import SelectInput from '../../../components/Select.vue';
+import Button from '../../../components/Button.vue';
+
+const table = ref({
+  cols: [
+    { title: 'avatar', field: 'avatar', type: 'img', show: true, sort: true },
+    { title: 'codeEmployee', field: 'codeEmployee', show: true, sort: true },
+    { title: 'name', field: 'name', show: true, sort: true },
+    { title: 'department', field: 'department', show: true, sort: true },
+    { title: 'position', field: 'position', show: true, sort: true },
+    { title: 'phone', field: 'phone', show: true, sort: true },
+    { title: 'email', field: 'email', show: true, sort: true },
+  ],
+  data: [
+    {
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      codeEmployee: 'dStock',
+      name: 'John Doe',
+      department: 'IT',
+      position: 'Manager',
+      phone: '12345',
+      email: 'johndoe@example.com',
+    },
+    {
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      codeEmployee: 'aStock',
+      name: 'Jane Doe',
+      department: 'HR',
+      position: 'Assistant',
+      phone: '67890',
+      email: 'janedoe@example.com',
+    },
+    {
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      codeEmployee: 'cStock',
+      name: 'Alice Smith',
+      department: 'Sales',
+      position: 'Lead',
+      phone: '11223',
+      email: 'alicesmith@example.com',
+    },
+    {
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      codeEmployee: 'dStock',
+      name: 'Bob Johnson',
+      department: 'Marketing',
+      position: 'Coordinator',
+      phone: '44556',
+      email: 'bobjohnson@example.com',
+    },
+    {
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+      codeEmployee: 'vStock updated',
+      name: 'bJohn Doe',
+      department: '2024-01-01',
+      position: 'Stock updated',
+      phone: 'John Doe',
+      email: '2024-01-01',
+    },
+  ],
+});
+const isDialogOpen = ref(false);
+const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
+const newItem = ref('');
+const editedItem = ref('');
+
+const avatar = ref('');
+const password = ref('');
+const name = ref('');
+const sex = ref('');
+const birthday = ref('');
+const position = ref('');
+const phone = ref('');
+const email = ref('');
+const employeeApprove = ref('');
+
+const openDialog = (type: 'add' | 'edit' | 'delete') => {
+  typeDialog.value = type;
+  isDialogOpen.value = true;
+};
+
+const handleAddItem = () => {
+  console.log('Adding item:', newItem.value);
+};
+
+const handleEditItem = () => {
+  console.log('Editing item:', editedItem.value);
+};
+
+const handleDeleteItem = () => {
+  console.log('Deleting item');
+  // Logic for deleting item
+};
+
+// function sortData(field: string) {
+//     table.value.data.sort((a: any, b: any) => {
+//         const valueA = a[field]?.toString().toLowerCase() || '';
+//         const valueB = b[field]?.toString().toLowerCase() || '';
+//         return valueA.localeCompare(valueB);
+//     });
+// }
+
+const positions = [
+  { id: 1, name: 'select 1' },
+  { id: 2, name: 'select 2' },
+  { id: 3, name: 'select 3' },
+];
+</script>
