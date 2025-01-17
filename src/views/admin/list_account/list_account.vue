@@ -5,8 +5,8 @@
             <Search placeholder="placeSearch" @input="onSearchInput" />
         </template>
         <template #actions="{ row }">
-            <Button type="actionEdit" @click="openDialog('edit')" />
-            <Button type="actionLock" @click="openDialog('delete', row.user_uuid)" />
+            <Button type="actionEdit" @click="openDialog('edit', row.user_uuid)" />
+            <Button type="actionLock" @click="openDialog('lock', row.user_uuid)" />
         </template>
     </TableComponent>
 
@@ -18,26 +18,28 @@
             <div v-if="typeDialog === 'edit'">
                 {{ $t('editAccount') }}
             </div>
-            <div v-if="typeDialog === 'delete'">
-                {{ $t('deleteAccount') }}
+            <div v-if="typeDialog === 'lock'">
+                {{ $t('lockAccount') }}
             </div>
         </template>
         <template #content>
-            <div v-if="typeDialog === 'add'">
-                <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
-                <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
-                <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
-                <SelectInput v-model="positions" :data="positions" label="authorities" id="positions" />
+            <div v-if="typeDialog === 'lock'">
+                {{ $t('titleLockAccount') }}
             </div>
-            <div v-if="typeDialog === 'edit'">
-                <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
-                <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
-                <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
-                <SelectInput v-model="positions" :data="positions" label="authorities" id="positions" />
-            </div>
-            <div v-if="typeDialog === 'delete'">
-                {{ $t('titleDelete') }}
-            </div>
+            <div v-else>
+              <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
+              <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
+              <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
+              <div class="mt-2.5">
+                <label for="role" class="block font-medium leading-6">
+                  {{ $t('authorities') }}
+                </label>
+                <v-select
+                    v-model="roleSelected"
+                    :options="roleStore.roles.map(el => ({ label: roleName[el.name], value: el.role_uuid }))"
+                />
+              </div>
+          </div>
         </template>
 
         <template #footer>
@@ -47,8 +49,8 @@
             <div v-if="typeDialog === 'edit'">
                 <Button type="save" @click="handleEditItem" />
             </div>
-            <div v-if="typeDialog === 'delete'">
-                <Button type="delete" @click="handleDeleteItem" />
+            <div v-if="typeDialog === 'lock'">
+                <Button type="lockAcc" @click="handleLockItem" />
             </div>
         </template>
     </Dialog>
@@ -61,12 +63,13 @@ import TableComponent from '../../../components/Table.vue';
 import Dialog from '../../../components/Dialog.vue';
 import CustomInput from '../../../components/Input.vue';
 import Search from '../../../components/Search.vue';
-import SelectInput from '../../../components/Select.vue';
 import Button from '../../../components/Button.vue';
 import { useUserStore } from '../../../stores/user.store';
+import { useRoleStore } from "../../../stores/role.store.ts";
+import {getKeyByValue, roleName} from "../../../common/reuse.ts";
 
 const isDialogOpen = ref(false);
-const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
+const typeDialog = ref<'add' | 'edit' | 'lock'>('add');
 const selectedRow = ref<Record<string, any> | null>(null);
 
 const searchQuery = ref('');
@@ -74,15 +77,16 @@ const debounceTimeout = ref<NodeJS.Timeout | null>(null);
 
 const full_name = ref('');
 const email = ref('');
+const roleSelected = ref('');
 const password = ref('');
-const positions = ref('f0c80740-2218-4757-b6af-4385a4dd90ca');
 const user_uuid = ref('');
 
 const userStore = useUserStore();
+const roleStore = useRoleStore();
 
 onMounted(async () => {
-  await userStore.listUsers();  // Call the action to fetch users
-  console.log(userStore.userList);  // Log the user list after it has been fetched
+  await userStore.listUsers();
+  await roleStore.listRoles();
 });
 
 const table = ref({
@@ -124,23 +128,29 @@ const onSearchInput = (event: Event) => {
     const input = event.target as HTMLInputElement;
     updateSearchQuery(input.value);
 };
-const openDialog = (type: 'add' | 'edit' | 'delete', userOrRow?: Record<string, any>) => {
+
+const openDialog = (type: 'add' | 'edit' | 'lock', uuid?: string) => {
     typeDialog.value = type;
     isDialogOpen.value = true;
 
-    if (userOrRow) {
+    if (uuid) {
+        if (type === 'lock') {
+            user_uuid.value = uuid;
+            return;
+        }
+        const userOrRow = userStore.userList.find((user) => user.user_uuid === uuid);
         selectedRow.value = userOrRow;
-        full_name.value = userOrRow.full_name || '';
-        email.value = userOrRow.email || '';
-        password.value = userOrRow.password || '';
-        positions.value = userOrRow.role_uuid || '';
-        user_uuid.value = userOrRow.user_uuid || '';
+        full_name.value = userOrRow?.full_name || '';
+        email.value = userOrRow?.email || '';
+        password.value = '';
+        roleSelected.value = getKeyByValue(roleName, userOrRow?.role?.name) || '';
+        user_uuid.value = userOrRow?.user_uuid || '';
     } else {
         selectedRow.value = null;
         full_name.value = '';
         email.value = '';
         password.value = '';
-        positions.value = 'f0c80740-2218-4757-b6af-4385a4dd90ca';
+        roleSelected.value = '';
     }
 };
 
@@ -149,24 +159,24 @@ const handleAddItem = async () => {
         email: email.value,
         password: password.value,
         full_name: full_name.value,
-        role_uuid: positions.value,
-        is_create_new_employee: false,
+        role_uuid: roleSelected.value.value,
     });
     isDialogOpen.value = false;
 };
 
-const handleEditItem = () => {
-    if (selectedRow.value) {
-        console.log('Deleting:', selectedRow.value);
-        userStore.updateUser(selectedRow.value);
+const handleEditItem = async () => {
+    if (user_uuid.value) {
+        await userStore.updateUser(user_uuid.value, {
+          full_name: full_name.value,
+          role_uuid: roleSelected.value.value,
+        });
     }
     isDialogOpen.value = false;
 };
 
-const handleDeleteItem = () => {
-    if (selectedRow.value) {
-        console.log('Deleting:', selectedRow.value);
-        userStore.deleteUser(selectedRow.value);
+const handleLockItem = async () => {
+    if (user_uuid.value) {
+        await userStore.lockAccountOfUser(user_uuid.value, { status: 0 });
     }
     isDialogOpen.value = false;
 };

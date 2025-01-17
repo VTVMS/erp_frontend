@@ -1,110 +1,38 @@
-<script lang="ts" setup>
-import { ref } from 'vue';
-import TableComponent from '../../../components/Table.vue';
-import Dialog from '../../../components/Dialog.vue';
-import CustomInput from '../../../components/Input.vue';
-import Button from '../../../components/Button.vue';
-
-const table = ref({
-    cols: [
-        { title: 'avatar', field: 'avatar', type: 'img', show: true, sort: true },
-        { title: 'codeDepartment', field: 'codeDepartment', show: true, sort: true },
-        { title: 'nameDepartment', field: 'nameDepartment', show: true, sort: true },
-        { title: 'quantityEmployee', field: 'quantityEmployee', show: true, sort: true },
-    ],
-    data: [
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeDepartment: 'PBOO1',
-            nameDepartment: 'Phòng nhân sự',
-            quantityEmployee: '5',
-        },
-        {
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-            codeDepartment: 'PB002',
-            nameDepartment: 'Phòng kỹ thuật',
-            quantityEmployee: '20',
-        },
-    ],
-});
-const isDialogOpen = ref(false);
-const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
-const newItem = ref('');
-const editedItem = ref('');
-
-const avatar = ref('');
-const codeDepartment = ref('');
-const nameDepartment = ref('');
-const quantityEmployee = ref('');
-
-const openDialog = (type: 'add' | 'edit' | 'delete') => {
-    typeDialog.value = type;
-    isDialogOpen.value = true;
-};
-
-const handleAddItem = () => {
-    console.log('Adding item:', newItem.value);
-};
-
-const handleEditItem = () => {
-    console.log('Editing item:', editedItem.value);
-};
-
-const handleDeleteItem = () => {
-    console.log('Deleting item');
-    // Logic for deleting item
-};
-
-const positions = [
-    { id: 1, name: 'select 1' },
-    { id: 2, name: 'select 2' },
-    { id: 3, name: 'select 3' },
-];
-</script>
-
 <template>
     <TableComponent :table="table" titleList="listDepartment">
         <template #customContent>
             <Button type="add" @click="openDialog('add')" />
-
-            <div class="relative mt-1">
-                <input type="text" id="searchInput" placeholder="Tìm kiếm ..." class="border border-gray-300 rounded-lg pl-10 w-full py-1" />
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="absolute inset-y-0 left-0 w-5 h-5 text-gray-400 ml-2 my-auto">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
-            </div>
+            <Search placeholder="placeSearch" @input="onSearchInput" />
         </template>
         <template #actions="{ row }">
-            <Button type="actionEdit" @click="openDialog('edit')" />
-            <Button type="actionDelete" @click="openDialog('delete')" />
+            <Button type="actionEdit" @click="openDialog('edit', row.department_uuid)" />
+            <Button type="actionDelete" @click="openDialog('delete', row.department_uuid)" />
         </template>
     </TableComponent>
 
-    <Dialog :isOpen="isDialogOpen" @update:isOpen="isDialogOpen = $event" :width="'450px'">
+    <Dialog :isOpen="isDialogOpen" @update:isOpen="isDialogOpen = $event" :width="'500px'">
         <template #header>
             <div v-if="typeDialog === 'add'">
-                {{ $t('addDepartment') }}
+                {{ $t('addAccount') }}
             </div>
             <div v-if="typeDialog === 'edit'">
-                {{ $t('editDepartment') }}
+                {{ $t('editAccount') }}
             </div>
             <div v-if="typeDialog === 'delete'">
-                {{ $t('deleteDepartment') }}
+                {{ $t('deleteAccount') }}
             </div>
         </template>
         <template #content>
             <div v-if="typeDialog === 'add'">
-                <CustomInput v-model="codeDepartment" type="text" label="codeDepartment" placeholder="codeDepartment" />
-                <CustomInput v-model="nameDepartment" type="text" label="nameDepartment" placeholder="nameDepartment" />
-                <CustomInput v-model="avatar" type="img" label="avatar" placeholder="Choose an image" />
+                <CustomInput label="name" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
+                <CustomInput label="department_code" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" />
             </div>
             <div v-if="typeDialog === 'edit'">
-                <CustomInput v-model="codeDepartment" type="text" label="codeDepartment" placeholder="codeDepartment" />
-                <CustomInput v-model="nameDepartment" type="text" label="nameDepartment" placeholder="nameDepartment" />
-                <CustomInput v-model="avatar" type="img" label="avatar" placeholder="Choose an image" />
+                <CustomInput label="name" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
+                <CustomInput label="department_code" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" />
             </div>
             <div v-if="typeDialog === 'delete'">
-                <p>{{ $t('titleDelete') }}</p>
+                {{ $t('titleDelete') }}
             </div>
         </template>
 
@@ -121,3 +49,98 @@ const positions = [
         </template>
     </Dialog>
 </template>
+
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+import { ref, computed } from 'vue';
+import TableComponent from '../../../components/Table.vue';
+import Dialog from '../../../components/Dialog.vue';
+import CustomInput from '../../../components/Input.vue';
+import Search from '../../../components/Search.vue';
+import Button from '../../../components/Button.vue';
+import { departmantStore } from '../../../stores/departmant.store';
+
+const isDialogOpen = ref(false);
+const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
+const selectedRow = ref<Record<string, any> | null>(null);
+
+const searchQuery = ref('');
+const debounceTimeout = ref<NodeJS.Timeout | null>(null);
+
+const department_code = ref('');
+const name = ref('');
+const organization_uuid = ref('');
+
+const deparStore = departmantStore();
+onMounted(async () => {
+    await deparStore.listDepartment();
+});
+
+const table = ref({
+    cols: [
+        { title: 'codeDepartment', field: 'department_code', show: true, sort: true },
+        { title: 'nameDepartment', field: 'name', show: true, sort: true },
+        { title: 'quantityEmployee', field: 'quantity', show: true, sort: true },
+    ],
+    data: computed(() => {
+        const departmentList = deparStore.departmentList.length ? deparStore.departmentList : [];
+        return departmentList
+            .filter((department) => {
+                const searchTerm = searchQuery.value.toLowerCase();
+                return department?.name?.toLowerCase().includes(searchTerm);
+            })
+            .map((department) => ({
+                department_code: department?.department_code,
+                name: department?.name,
+                quantity: department?.quantity,
+                department_uuid: department?.department_uuid,
+            }));
+    }),
+});
+
+const updateSearchQuery = (query: string) => {
+    if (debounceTimeout.value) {
+        clearTimeout(debounceTimeout.value);
+    }
+    debounceTimeout.value = setTimeout(() => {
+        searchQuery.value = query;
+    }, 500);
+};
+
+const onSearchInput = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    updateSearchQuery(input.value);
+};
+
+const openDialog = (type: 'add' | 'edit' | 'delete', department_uuid?: string) => {
+    typeDialog.value = type;
+    isDialogOpen.value = true;
+
+    if (type === 'edit' || (type === 'delete' && department_uuid)) {
+        selectedRow.value = deparStore.departmentList.find((department) => department.department_uuid === department_uuid) || null;
+    } else {
+        selectedRow.value = null;
+        department_code.value = '';
+        organization_uuid.value = '78b25f94-7acc-4fc7-8c0e-4d5aa908ddde';
+        name.value = '';
+    }
+};
+
+const handleAddItem = async () => {
+    await deparStore.createDepartment({
+        department_code: department_code.value,
+        name: name.value,
+        organization_uuid: '78b25f94-7acc-4fc7-8c0e-4d5aa908ddde',
+    });
+    isDialogOpen.value = false;
+};
+
+const handleDeleteItem = async () => {
+    if (!selectedRow.value || !selectedRow.value.department_uuid) {
+        return;
+    }
+    await deparStore.deleteDepartment(selectedRow.value.department_uuid);
+    isDialogOpen.value = false;
+    selectedRow.value = null;
+};
+</script>
