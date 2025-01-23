@@ -1,31 +1,31 @@
 import { defineStore } from 'pinia';
 import { useToast } from 'vue-toastification';
-import { EmployeeModel ,CreateNewEmployeeRequest} from '../model/employee.model.ts';
-import { employeeService } from '../services/employee.service.ts';
+import { ChannelModel, CreateNewChannelRequest } from '../model/channel.model.ts';
+import { channelService } from '../services/channel.service.ts';
 
-export const EmployeeStore = defineStore('employee', {
+export const ChannelStore = defineStore('department', {
     state: () => ({
-        employeeList: [] as EmployeeModel[],
+        channelList: [] as ChannelModel[],
         error: null as string | null,
         isLoading: false,
     }),
     actions: {
         // list of users
-        async listEmployee() {
+        async listChannel() {
             this.isLoading = true;
             this.error = null;
 
             try {
-                const [error, result] = await employeeService.get_list_employees();
+                const [error, result] = await channelService.get_list_channel();
                 if (error) {
                     this.error = 'Failed to user list';
                     this.isLoading = false;
                     console.error(error);
                     return;
                 }
-                console.log(this.employeeList);
-
-                this.employeeList = result.data.reverse();
+                console.log(this.channelList);
+                
+                this.channelList = result.data.reverse();
                 this.error = null;
                 this.isLoading = false;
             } catch (err) {
@@ -36,18 +36,18 @@ export const EmployeeStore = defineStore('employee', {
                 this.error = null;
             }
         },
-        async createEmployee(payload: CreateNewEmployeeRequest) {
+        async createChannel(payload: CreateNewChannelRequest) {
             const toast = useToast();
             this.isLoading = true;
             this.error = null;
             try {
-                const [error, result] = await employeeService.create_new_employee(payload);
+                const [error, result] = await channelService.create_new_channel(payload);
                 if (error) {
                     this.error = 'Failed to create user';
                     console.error(error);
                     toast.error('Thông tin tài khoản không đúng. Vui lòng kiểm tra lại!');
                 } else {
-                    this.employeeList.unshift(result.data);
+                    this.channelList.unshift(result.data);
                     this.error = null;
                     this.isLoading = false;
                 }

@@ -7,10 +7,10 @@
         <template #actions="{ row }">
             <Button type="actionEdit" @click="openDialog('edit', row.user_uuid)" />
             <div v-if="row.status">
-              <Button type="actionLock" @click="openDialog('lock', row.user_uuid)" />
+                <Button type="actionLock" @click="openDialog('lock', row.user_uuid)" />
             </div>
             <div v-else>
-              <Button type="actionUnLock" @click="openDialog('unlock', row.user_uuid)" />
+                <Button type="actionUnLock" @click="openDialog('unlock', row.user_uuid)" />
             </div>
         </template>
     </TableComponent>
@@ -27,7 +27,7 @@
                 {{ $t('lockAccount') }}
             </div>
             <div v-if="typeDialog === 'unlock'">
-              {{ $t('unLockAccount') }}
+                {{ $t('unLockAccount') }}
             </div>
         </template>
         <template #content>
@@ -38,18 +38,15 @@
                 {{ $t('titleUnLockAccount') }}
             </div>
             <div v-else>
-              <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
-              <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
-              <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
-              <div class="mt-2.5">
-                <label for="role" class="block font-medium leading-6">
-                  {{ $t('authorities') }}
-                </label>
-                <v-select
-                    v-model="roleSelected"
-                    :options="roleStore.roles.map(el => ({ label: roleName[el.name], value: el.role_uuid }))"
-                />
-              </div>
+                <CustomInput label="name" placeholder="enterYourEmail" id="email" required v-model="full_name" type="text" />
+                <CustomInput label="email" placeholder="enterYourEmail" id="email" required v-model="email" type="text" />
+                <CustomInput label="password" placeholder="enterYourEmail" id="password" required v-model="password" type="text" />
+                <div class="mt-2.5">
+                    <label for="role" class="block font-medium leading-6">
+                        {{ $t('authorities') }}
+                    </label>
+                    <v-select v-model="roleSelected" :options="roleStore.roles.map((el) => ({ label: roleName[el.name], value: el.role_uuid }))" />
+                </div>
             </div>
         </template>
 
@@ -64,7 +61,7 @@
                 <Button type="lockAcc" @click="handleLockItem" />
             </div>
             <div v-if="typeDialog === 'unlock'">
-              <Button type="unlockAcc" @click="handleUnLockItem" />
+                <Button type="unlockAcc" @click="handleUnLockItem" />
             </div>
         </template>
     </Dialog>
@@ -79,8 +76,8 @@ import CustomInput from '../../../components/Input.vue';
 import Search from '../../../components/Search.vue';
 import Button from '../../../components/Button.vue';
 import { useUserStore } from '../../../stores/user.store';
-import { useRoleStore } from "../../../stores/role.store.ts";
-import { getKeyByValue, roleName } from "../../../common/reuse.ts";
+import { useRoleStore } from '../../../stores/role.store.ts';
+import { getKeyByValue, roleName } from '../../../common/reuse.ts';
 
 const isDialogOpen = ref(false);
 const typeDialog = ref<'add' | 'edit' | 'lock' | 'unlock'>('add');
@@ -99,8 +96,8 @@ const userStore = useUserStore();
 const roleStore = useRoleStore();
 
 onMounted(async () => {
-  await userStore.listUsers();
-  await roleStore.listRoles();
+    await userStore.listUsers();
+    await roleStore.listRoles();
 });
 
 const table = ref({
@@ -181,8 +178,8 @@ const handleAddItem = async () => {
 const handleEditItem = async () => {
     if (user_uuid.value) {
         await userStore.updateUser(user_uuid.value, {
-          full_name: full_name.value,
-          role_uuid: roleSelected.value.value,
+            full_name: full_name.value,
+            role_uuid: roleSelected.value.value,
         });
     }
     isDialogOpen.value = false;
@@ -196,9 +193,9 @@ const handleLockItem = async () => {
 };
 
 const handleUnLockItem = async () => {
-  if (user_uuid.value) {
-    await userStore.handleStatusAccountOfUser(user_uuid.value, { status: 1 });
-  }
-  isDialogOpen.value = false;
+    if (user_uuid.value) {
+        await userStore.handleStatusAccountOfUser(user_uuid.value, { status: 1 });
+    }
+    isDialogOpen.value = false;
 };
 </script>

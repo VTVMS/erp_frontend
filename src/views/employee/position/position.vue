@@ -19,56 +19,53 @@
 
     <Dialog :isOpen="isDialogPositionOpen" @update:isOpen="isDialogPositionOpen = $event" :width="'500px'">
         <template #header>
-          <div v-if="typeDialog === 'add'">
-            {{ $t('addAccount') }}
-          </div>
-          <div v-if="typeDialog === 'edit'">
-            {{ $t('editAccount') }}
-          </div>
-          <div v-if="typeDialog === 'delete'">
-            {{ $t('deleteAccount') }}
-          </div>
+            <div v-if="typeDialog === 'add'">
+                {{ $t('addAccount') }}
+            </div>
+            <div v-if="typeDialog === 'edit'">
+                {{ $t('editAccount') }}
+            </div>
+            <div v-if="typeDialog === 'delete'">
+                {{ $t('deleteAccount') }}
+            </div>
         </template>
         <template #content>
-          <div v-if="typeDialog === 'delete'">
-            {{ $t('titleDelete') }}
-          </div>
-          <div v-else>
-            <div v-if="typeDialog === 'add'">
-              <CustomInput label="position_code" placeholder="enterYourPositionCode" id="position_code" required v-model="position_code" type="text" />
+            <div v-if="typeDialog === 'delete'">
+                {{ $t('titleDelete') }}
             </div>
-            <CustomInput label="position_name" placeholder="enterYourPositionName" id="position_name" required v-model="position_name" type="text" />
-            <CustomInput label="position_description" placeholder="enterYourPositionDescription" id="position_description" v-model="position_description" type="text" />
-            <div v-if="typeDialog === 'add'">
-              <div class="mt-2.5">
-                <label for="department" class="block font-medium leading-6">
-                  {{ $t('department') }}
-                </label>
-                <v-select
-                    v-model="departmentSelected"
-                    :options="departmentStore.departmentList.map(el => ({ label: el.name, value: el.department_uuid }))"
-                />
-              </div>
+            <div v-else>
+                <div v-if="typeDialog === 'add'">
+                    <CustomInput label="position_code" placeholder="enterYourPositionCode" id="position_code" required v-model="position_code" type="text" />
+                </div>
+                <CustomInput label="position_name" placeholder="enterYourPositionName" id="position_name" required v-model="position_name" type="text" />
+                <CustomInput label="position_description" placeholder="enterYourPositionDescription" id="position_description" v-model="position_description" type="text" />
+                <div v-if="typeDialog === 'add'">
+                    <div class="mt-2.5">
+                        <label for="department" class="block font-medium leading-6">
+                            {{ $t('department') }}
+                        </label>
+                        <v-select v-model="departmentSelected" :options="departmentStore.departmentList.map((el) => ({ label: el.name, value: el.department_uuid }))" />
+                    </div>
+                </div>
             </div>
-          </div>
         </template>
 
         <template #footer>
             <div v-if="typeDialog === 'add'">
-              <Button type="save" @click="handleAddItem" />
+                <Button type="save" @click="handleAddItem" />
             </div>
             <div v-if="typeDialog === 'edit'">
-              <Button type="save" @click="handleEditItem" />
+                <Button type="save" @click="handleEditItem" />
             </div>
             <div v-if="typeDialog === 'delete'">
-              <Button type="delete" @click="handleDeleteItem" />
+                <Button type="delete" @click="handleDeleteItem" />
             </div>
         </template>
     </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref,computed} from 'vue';
+import { ref, computed } from 'vue';
 import TableComponent from '../../../components/Table.vue';
 import Dialog from '../../../components/Dialog.vue';
 import ExpandablePanel from '../../../components/ExpandablePanel.vue';
@@ -76,16 +73,16 @@ import CustomInput from '../../../components/Input.vue';
 import Button from '../../../components/Button.vue';
 import { onMounted } from 'vue';
 import { usePositionStore } from '../../../stores/position.store';
-import { PositionModel } from "../../../model/position.model.ts";
-import { useDepartmentStore } from "../../../stores/departmant.store.ts";
-import { DepartmentModel } from "../../../model/departmant.model.ts";
+import { PositionModel } from '../../../model/position.model.ts';
+import { useDepartmentStore } from '../../../stores/departmant.store.ts';
+import { DepartmentModel } from '../../../model/departmant.model.ts';
 
 const positionStore = usePositionStore();
 const departmentStore = useDepartmentStore();
 
 onMounted(async () => {
-  await positionStore.listPositions();
-  await departmentStore.listDepartments();
+    await positionStore.listPositions();
+    await departmentStore.listDepartments();
 });
 
 const table = ref({
@@ -113,32 +110,32 @@ const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
 const selectedRow = ref<PositionRowItem | null>(null);
 
 const handleAddItem = async () => {
-  if (departmentSelected.value) {
-    await positionStore.createPosition({
-      department_uuid: departmentSelected.value.value,
-      name: position_name.value,
-      position_code: position_code.value,
-      description: position_description.value,
-    });
-  }
-  isDialogPositionOpen.value = false;
+    if (departmentSelected.value) {
+        await positionStore.createPosition({
+            department_uuid: departmentSelected.value.value,
+            name: position_name.value,
+            position_code: position_code.value,
+            description: position_description.value,
+        });
+    }
+    isDialogPositionOpen.value = false;
 };
 
 const handleEditItem = async () => {
-  if (selectedRow.value) {
-    await positionStore.updatePosition(selectedRow.value?.id, {
-      name: position_name.value,
-      description: position_description.value,
-    });
-  }
-  isDialogPositionOpen.value = false;
+    if (selectedRow.value) {
+        await positionStore.updatePosition(selectedRow.value?.id, {
+            name: position_name.value,
+            description: position_description.value,
+        });
+    }
+    isDialogPositionOpen.value = false;
 };
 
 const handleDeleteItem = async () => {
-  if (selectedRow.value) {
-    await positionStore.deletePosition(selectedRow.value?.id);
-  }
-  isDialogPositionOpen.value = false;
+    if (selectedRow.value) {
+        await positionStore.deletePosition(selectedRow.value?.id);
+    }
+    isDialogPositionOpen.value = false;
 };
 
 interface PositionRowItem {

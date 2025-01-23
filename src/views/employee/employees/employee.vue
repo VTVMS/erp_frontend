@@ -67,9 +67,9 @@
         </template>
         <template #content>
             <div v-if="typeDialog === 'add'">
-                <CustomInput v-model="name" type="text" label="name" placeholder="name" required/>
+                <CustomInput v-model="name" type="text" label="name" placeholder="name" required />
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
-                    <CustomInput v-model="password" type="text" label="password" placeholder="password"  required/>
+                    <CustomInput v-model="password" type="text" label="password" placeholder="password" required />
                     <SelectInput v-model="position" :data="positions" label="position" id="position" />
                 </div>
                 <div class="grid gap-4 grid-cols-2 grid-rows-1">
@@ -126,71 +126,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import TableComponent from '../../../components/Table.vue';
 import Dialog from '../../../components/Dialog.vue';
 import CustomInput from '../../../components/Input.vue';
 import SelectInput from '../../../components/Select.vue';
 import Button from '../../../components/Button.vue';
+import { EmployeeStore } from '../../../stores/employee.store.ts';
+import { usePositionStore } from '../../../stores/position.store';
 
-const table = ref({
-  cols: [
-    { title: 'avatar', field: 'avatar', type: 'img', show: true, sort: true },
-    { title: 'codeEmployee', field: 'codeEmployee', show: true, sort: true },
-    { title: 'name', field: 'name', show: true, sort: true },
-    { title: 'department', field: 'department', show: true, sort: true },
-    { title: 'position', field: 'position', show: true, sort: true },
-    { title: 'phone', field: 'phone', show: true, sort: true },
-    { title: 'email', field: 'email', show: true, sort: true },
-  ],
-  data: [
-    {
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-      codeEmployee: 'dStock',
-      name: 'John Doe',
-      department: 'IT',
-      position: 'Manager',
-      phone: '12345',
-      email: 'johndoe@example.com',
-    },
-    {
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-      codeEmployee: 'aStock',
-      name: 'Jane Doe',
-      department: 'HR',
-      position: 'Assistant',
-      phone: '67890',
-      email: 'janedoe@example.com',
-    },
-    {
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-      codeEmployee: 'cStock',
-      name: 'Alice Smith',
-      department: 'Sales',
-      position: 'Lead',
-      phone: '11223',
-      email: 'alicesmith@example.com',
-    },
-    {
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-      codeEmployee: 'dStock',
-      name: 'Bob Johnson',
-      department: 'Marketing',
-      position: 'Coordinator',
-      phone: '44556',
-      email: 'bobjohnson@example.com',
-    },
-    {
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-      codeEmployee: 'vStock updated',
-      name: 'bJohn Doe',
-      department: '2024-01-01',
-      position: 'Stock updated',
-      phone: 'John Doe',
-      email: '2024-01-01',
-    },
-  ],
-});
+const selectedRow = ref<Record<string, any> | null>(null);
+
 const isDialogOpen = ref(false);
 const typeDialog = ref<'add' | 'edit' | 'delete'>('add');
 const newItem = ref('');
@@ -206,22 +153,92 @@ const phone = ref('');
 const email = ref('');
 const employeeApprove = ref('');
 
-const openDialog = (type: 'add' | 'edit' | 'delete') => {
-  typeDialog.value = type;
-  isDialogOpen.value = true;
+const employeeStore = EmployeeStore();
+
+onMounted(async () => {
+    await employeeStore.listEmployee();
+});
+
+const table = ref({
+    cols: [
+        { title: 'avatar', field: 'avatar', type: 'img', show: true, sort: true },
+        { title: 'codeEmployee', field: 'codeEmployee', show: true, sort: true },
+        { title: 'name', field: 'name', show: true, sort: true },
+        { title: 'department', field: 'department', show: true, sort: true },
+        { title: 'position', field: 'position', show: true, sort: true },
+        { title: 'phone', field: 'phone', show: true, sort: true },
+        { title: 'email', field: 'email', show: true, sort: true },
+    ],
+    data: computed(() => {
+        const employeeList = employeeStore.employeeList.length ? employeeStore.employeeList : [];
+        return employeeList
+            .filter((employee) => {
+                const searchTerm = searchQuery.value.toLowerCase();
+                return employee?.full_name?.toLowerCase().includes(searchTerm);
+            })
+            .map((employee) => ({
+                department_code: department?.department_code,
+                name: department?.name,
+                quantity: department?.quantity,
+                department_uuid: department?.department_uuid,
+            }));
+    }),
+});
+
+const openDialog = (type: 'add' | 'edit' | 'delete', uuid?: string) => {
+    typeDialog.value = type;
+    isDialogOpen.value = true;
+
+    if (uuid) {
+        if (type === 'delete') {
+            department_uuid.value = uuid;
+            return;
+        }
+        const employeetOrRow = employeeStore.employeeList.find((employee) => employee.employee_uuid === uuid);
+        selectedRow.value = employeetOrRow;
+        name.value = employeetOrRow.name;
+        password.value = employeetOrRow.password;
+        position.value = itemployeetOrRowem.position;
+        email.value = employeetOrRow.email;
+        phone.value = employeetOrRow.phone;
+        sex.value = employeetOrRow.sex;
+        birthday.value = employeetOrRow.birthday;
+        avatar.value = employeetOrRow.avatar;
+        employeeApprove.value = employeetOrRow.employeeApprove;
+    } else {
+        selectedRow.value = null;
+        name.value = '';
+        password.value = '';
+        position.value = '';
+        email.value = '';
+        phone.value = '';
+        sex.value = '';
+        birthday.value = '';
+        avatar.value = '';
+        employeeApprove.value = '';
+    }
+};
+const handleAddItem = async () => {
+    await employeeStore.createEmployee({
+        name: name.value,
+        password: password.value,
+        position: position.value,
+        email: email.value,
+        phone: phone.value,
+        sex: sex.value,
+        birthday: birthday.value
+    });
+    isDialogOpen.value = false;
 };
 
-const handleAddItem = () => {
-  console.log('Adding item:', newItem.value);
-};
 
 const handleEditItem = () => {
-  console.log('Editing item:', editedItem.value);
+    console.log('Editing item:', editedItem.value);
 };
 
 const handleDeleteItem = () => {
-  console.log('Deleting item');
-  // Logic for deleting item
+    console.log('Deleting item');
+    // Logic for deleting item
 };
 
 // function sortData(field: string) {
@@ -233,8 +250,8 @@ const handleDeleteItem = () => {
 // }
 
 const positions = [
-  { id: 1, name: 'select 1' },
-  { id: 2, name: 'select 2' },
-  { id: 3, name: 'select 3' },
+    { id: 1, name: 'select 1' },
+    { id: 2, name: 'select 2' },
+    { id: 3, name: 'select 3' },
 ];
 </script>

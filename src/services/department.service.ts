@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { DepartmentModel, CreateNewDepartmantRequest } from '../model/departmant.model.ts';
+import { DepartmentModel, CreateNewDepartmantRequest, UpdateDepartmantRequest } from '../model/departmant.model.ts';
 import { axiosInstance } from '../common/config.ts';
 import { MessageResponseModel } from '../model/msg_res.model.ts';
 
@@ -25,18 +25,18 @@ class DepartmantService {
             return [error];
         }
     }
-    async admin_update_user(user_uuid: string, payload: CreateNewDepartmantRequest): Promise<[null, UserModel] | [Error]> {
+    async update_department(department_uuid: string, payload: UpdateDepartmantRequest): Promise<[null, DepartmentModel] | [Error]> {
         try {
-            const { data } = await this.httpClient.put<UserModel>(`/user/update/${user_uuid}`, { ...payload });
+            const { data } = await this.httpClient.put<DepartmentModel>(`/department/update/${department_uuid}`, { ...payload });            
             return [null, data];
         } catch (error) {
             return [error];
         }
     }
 
-    async admin_delete_user(user_uuid: string): Promise<[null, MessageResponseModel] | [Error]> {
+    async delete_department(department_uuid: string): Promise<[null, DepartmentModel] | [Error]> {
         try {
-            const { data } = await this.httpClient.delete<MessageResponseModel>(`/department/delete/${user_uuid}`);
+            const { data } = await this.httpClient.put<DepartmentModel>(`/department/delete/${department_uuid}`);
             return [null, data];
         } catch (error) {
             return [error];

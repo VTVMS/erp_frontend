@@ -22,6 +22,8 @@ export const useUserStore = defineStore('user', {
                     console.error(error);
                     return;
                 }
+                console.log(result.data);
+                
                 this.userList = result.data.reverse();
                 this.error = null;
                 this.isLoading = false;

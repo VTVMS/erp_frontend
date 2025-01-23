@@ -104,7 +104,8 @@ const vi = {
     stopWorking:'Ngừng hoạt động',
     unknown:'Không khác định',
     updating:'Đang cập nhật ...',
-    placeSearch:'Tìm kiếm ...'
+    placeSearch:'Tìm kiếm ...',
+    nameChannel:'Tên kênh',
 };
 
 export default vi;
