@@ -5,7 +5,7 @@
             <Search placeholder="placeSearch" @input="onSearchInput" />
         </template>
         <template #actions="{ row }">
-            <Button type="actionEdit" @click="openDialog('edit')" />
+            <Button type="actionEdit" @click="openDialog('edit', row.department_uuid)" />
             <Button type="actionDelete" @click="openDialog('delete', row.department_uuid)" />
         </template>
     </TableComponent>
@@ -24,12 +24,12 @@
         </template>
         <template #content>
             <div v-if="typeDialog === 'add'">
-                <CustomInput label="name" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
-                <CustomInput label="department_code" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" />
+                <CustomInput label="codeDepartment" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" />
+                <CustomInput label="nameDepartment" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
             </div>
             <div v-if="typeDialog === 'edit'">
-                <CustomInput label="name" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
-                <CustomInput label="department_code" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" />
+                <CustomInput label="codeDepartment" placeholder="enterYourEmail" id="email" required v-model="department_code" type="text" :disabled="true" />
+                <CustomInput label="nameDepartment" placeholder="enterYourEmail" id="name" required v-model="name" type="text" />
             </div>
             <div v-if="typeDialog === 'delete'">
                 {{ $t('titleDelete') }}
@@ -69,8 +69,8 @@ const debounceTimeout = ref<NodeJS.Timeout | null>(null);
 
 const department_code = ref('');
 const name = ref('');
-const organization_uuid= ref('')
-
+const organization_uuid = ref('');
+const department_uuid = ref('');
 const deparStore = useDepartmentStore();
 
 onMounted(async () => {
@@ -94,6 +94,7 @@ const table = ref({
                 department_code: department?.department_code,
                 name: department?.name,
                 quantity: department?.quantity,
+                department_uuid: department?.department_uuid,
             }));
     }),
 });
@@ -111,19 +112,25 @@ const onSearchInput = (event: Event) => {
     const input = event.target as HTMLInputElement;
     updateSearchQuery(input.value);
 };
-const openDialog = (type: 'add' | 'edit' | 'delete', department_uuid?: string) => {
+const openDialog = (type: 'add' | 'edit' | 'delete', uuid?: string) => {
     typeDialog.value = type;
     isDialogOpen.value = true;
 
-    if (department_uuid) {
+    if (uuid) {
+        if (type === 'delete') {
+            department_uuid.value = uuid;
+            return;
+        }
         const departmentOrRow = deparStore.departmentList.find((department) => department.department_uuid === uuid);
         selectedRow.value = departmentOrRow;
-        department_code.value = departmentOrRow.department_code || '';
-        name.value = departmentOrRow.name || '';
+        department_uuid.value = departmentOrRow.department_uuid;
+        department_code.value = departmentOrRow.department_code;
+        name.value = departmentOrRow.name;
     } else {
         selectedRow.value = null;
+        department_uuid.value = '';
         department_code.value = '';
-        organization_uuid.value='78b25f94-7acc-4fc7-8c0e-4d5aa908ddde';
+        organization_uuid.value = '78b25f94-7acc-4fc7-8c0e-4d5aa908ddde';
         name.value = '';
     }
 };
@@ -132,22 +139,26 @@ const handleAddItem = async () => {
     await deparStore.createDepartment({
         department_code: department_code.value,
         name: name.value,
-        organization_uuid:'78b25f94-7acc-4fc7-8c0e-4d5aa908ddde'
+        organization_uuid: '78b25f94-7acc-4fc7-8c0e-4d5aa908ddde',
     });
     isDialogOpen.value = false;
 };
 
-// const handleEditItem = () => {
-//     if (selectedRow.value) {
-//         console.log('Deleting:', selectedRow.value);
-//         deparStore.updateUser(selectedRow.value);
-//     }
-//     isDialogOpen.value = false;
-// };
+const handleEditItem = async () => {
+    if (department_uuid.value) {
+        await deparStore.updateDepartment(department_uuid.value, {
+            department_code: department_code.value,
+            name: name.value,
+        });
+    }
+    isDialogOpen.value = false;
+};
 
-const handleDeleteItem = () => {
-    if (selectedRow.value) {
-        console.log('Deleting:', selectedRow.value);
+const handleDeleteItem = async () => {
+    if (department_uuid.value) {
+        await deparStore.deleteDepartment(department_uuid.value, {
+            status: status.value,
+        });
     }
     isDialogOpen.value = false;
 };

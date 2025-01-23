@@ -5,6 +5,11 @@ export interface CreateNewDepartmantRequest {
     name: string;
     organization_uuid: string;
 }
+export interface UpdateDepartmantRequest {
+    department_code?: string;
+    description?: string;
+    name?: string;
+}
 
 export class DepartmentModel {
     create_at!: string;

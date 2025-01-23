@@ -10,12 +10,31 @@ export class PositionOfEmployeeModel {
 
 export class EmployeeModel {
     user_uuid!: string;
-    full_name!: string;
+    full_name?: string;
     gender?: string;
     phone_number?: string;
     address?: string;
-    department!: DepartmentOfEmployeeModel;
-    position!: PositionOfEmployeeModel;
-    created_at!: string;
+    department?: DepartmentOfEmployeeModel;
+    position?: PositionOfEmployeeModel;
+    created_at?: string;
     updated_at!: string;
+}
+
+export interface CreateNewEmployeeRequest {
+    full_name: string;
+    password: string;
+    gender: string;
+    phone_number: string;
+    address: string;
+    department: string;
+    position: string;
+}
+export interface UpdateEmployeetRequest {
+    full_name?: string;
+    password?: string;
+    gender?: string;
+    phone_number?: string;
+    address?: string;
+    department?: string;
+    position?: string;
 }
